@@ -3,13 +3,29 @@ import java.util.*;
 /**
  * @opt all
  */
+class Main {
+	protected String pathFichierConf;
+	
+	public static Object getConf(String category, String param) {}
+}
+
+/**
+ * @opt all
+ * @has "" - "" Case
+ * @has "" - "" Nourriture
+ */
 class Loft {
-	public static Case[][] grille;
-	public static int largeurLoftX;
-	public static int longueurLoftY;
+	protected Case[][] grille;
+	protected int largeurLoftX;
+	protected int longueurLoftY;
 	protected ArrayList<Nourriture> bouffeDispo;
 	protected int periodePrimeTime;
 	protected int tempsJusquaPrimeTime;
+	
+	public Loft() {
+		// getConf() : longueur, largeur, listeBouffe, périodePrimeTime
+	}
+	
 	public void tour() {
 		// Déplacement + Action + PrimeTime
 	}
@@ -27,10 +43,15 @@ class Loft {
 
 /**
  * @opt all
+ * @has "" - "" Neuneu
+ * @has "" - "" Nourriture
  */
 class Case {
 	protected ArrayList<Neuneu> neuneuSurCase;
 	protected Nourriture bouffe;
+	
+	public Case() {}
+	
 	public void ajouterContenu(Element element) {}
 	public void supprimerContenu(Element element) {}
 	public boolean estLibre() {}
@@ -43,8 +64,12 @@ class Case {
 /**
  * @opt all
  */
-class Element {
+abstract class Element {
 	protected String pathLogo;
+	
+	protected Element() {
+		// Lire pathLogo fichier conf
+	}
 }
 
 /**
@@ -53,6 +78,9 @@ class Element {
 class Nourriture extends Element {
 	protected String type;
 	protected int valeurEnergetique;
+	
+	public Nourriture(String type, int valeurEnergetique) {}
+	
 	public int consommation(int nourritureDemandee) {
 		// Renvoie la quantité de nourriture maxi possible
 	}
@@ -60,8 +88,11 @@ class Nourriture extends Element {
 
 /**
  * @opt all
+ * @has "" - "" Loft
+ * @has "" - "" Nourriture
+ * @has "" - "" Element
  */
-class Neuneu extends Element {
+abstract class Neuneu extends Element {
 	public static int HOMME = 1;
 	public static int FEMME = 0;
 	
@@ -71,10 +102,16 @@ class Neuneu extends Element {
 	protected int depenseMarcher;
 	protected int depenseSexe;
 	protected int valeurEnergetique;
-	protected int estMature = 4;							// Décrémente à chaque tour. Peut copuler à 0.
+	protected int estMature;							// Décrémente à chaque tour. Peut copuler à 0.
 	protected int energieMax;
 	protected Element cible;
 	protected ArrayList<Nourriture> listeNourriture;
+	protected Loft loft;
+	
+	protected Neuneu(Loft loft) {
+		// Appelle setNom()
+		// Sexe aléatoire 
+	}
 	
 	public void setNom() {}
 	public void marcher(int caseCibleX, int caseCibleY) {}
@@ -88,6 +125,12 @@ class Neuneu extends Element {
  * @opt all
  */
 class Erratique extends Neuneu {
+	public Erratique(Loft loft) {
+		super(loft);
+		// Energie = EnergieMax
+		// EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
+	}
+	
 	public void action() {}
 	public int[] determineCaseCible() {}
 	public void marcher() {
@@ -100,6 +143,13 @@ class Erratique extends Neuneu {
  */
 abstract class Non_Erratique extends Neuneu {
 	public int[] determineCaseCible() {}
+	
+	public Non_Erratique(Loft loft) {
+		super(loft);
+		// Energie = EnergieMax
+		// EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
+	}
+	
 	public void marcher() {
 		// Appelle determineCaserCible(), puis marcher(X, Y) avec la position déterminée
 	}
@@ -109,6 +159,12 @@ abstract class Non_Erratique extends Neuneu {
  * @opt all
  */
 class Lapin extends Non_Erratique {
+	public Lapin(Loft loft) {
+		super(loft);
+		// Energie = EnergieMax
+		// EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
+	}
+	
 	public void action() {}
 }
 
@@ -116,6 +172,12 @@ class Lapin extends Non_Erratique {
  * @opt all
  */
 class Vorace extends Non_Erratique {
+	public Vorace(Loft loft) {
+		super(loft);
+		// Energie = EnergieMax
+		// EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
+	}
+	
 	public void action() {}
 }
 
@@ -123,6 +185,12 @@ class Vorace extends Non_Erratique {
  * @opt all
  */
 class Cannibale extends Vorace {
+	public Cannibale(Loft loft) {
+		super(loft);
+		// Energie = EnergieMax
+		// EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
+	}
+	
 	public void action() {}
 	public int[] determineCaseCible() {}
 }
