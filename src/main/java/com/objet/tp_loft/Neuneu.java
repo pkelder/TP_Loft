@@ -1,3 +1,9 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.objet.tp_loft;
+
 import java.util.*;
 
 
@@ -11,7 +17,7 @@ abstract class Neuneu extends Element {
 	protected int depenseMarcher;
 	protected int depenseSexe;
 	protected int valeurEnergetique;
-	protected int estMature;							// DŽcrŽmente ˆ chaque tour. Peut copuler ˆ 0.
+	protected int estMature;							// Dï¿½crï¿½mente ï¿½ chaque tour. Peut copuler ï¿½ 0.
 	protected int energieMax;
 	protected Element cible;
 	protected ArrayList<Nourriture> listeNourriture;
@@ -19,13 +25,13 @@ abstract class Neuneu extends Element {
 	
 	protected Neuneu(Loft loft) {
 		// Appelle setNom()
-		// Sexe alŽatoire 
+		// Sexe alï¿½atoire 
 	}
 	
 	public void setNom() {}
 	public void marcher(int caseCibleX, int caseCibleY) {}
 	public void manger(Nourriture bouffe) {}
 	public void copuler(Neuneu partenaire) {}
-	public abstract void action() {}
-	public abstract int[] determineCaseCible() {}
+	public abstract void action();
+	public abstract int[] determineCaseCible();
 }

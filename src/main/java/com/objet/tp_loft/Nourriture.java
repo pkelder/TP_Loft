@@ -1,3 +1,9 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.objet.tp_loft;
+
 class Nourriture extends Element {
 	protected String type;
 	protected int valeurEnergetique;
@@ -10,7 +16,7 @@ class Nourriture extends Element {
 	}
 	
 	public int consommation(int nourritureDemandee) {
-		// Renvoie la quantitŽ de nourriture maxi possible
+		// Renvoie la quantitï¿½ de nourriture maxi possible
 		int nourriturePossible=this.valeurEnergetique;
 		if (nourriturePossible>nourritureDemandee)
 			return nourritureDemandee;

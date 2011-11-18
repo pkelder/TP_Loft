@@ -23,7 +23,8 @@ public class Erratique extends Neuneu {
     }
     
 	public int[] determineCaseCible() {
-    
+        int[] toto = null;
+        return toto;
     }
     
 	public void marcher() {

@@ -1,3 +1,9 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.objet.tp_loft;
+
 import java.util.*;
 
 
@@ -17,6 +23,6 @@ class Case {
 		return false;
 	}
 	public void action() {
-		// Appelle les action de la liste de Neuneu. Gère les conflits
+		// Appelle les action de la liste de Neuneu. GÔøΩre les conflits
 	}
 }

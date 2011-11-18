@@ -1,3 +1,9 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.objet.tp_loft;
+
 class Lapin extends Non_Erratique {
 	public Lapin(Loft loft) {
 		super(loft);

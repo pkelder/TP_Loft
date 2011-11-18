@@ -19,7 +19,8 @@ public abstract class Non_Erratique extends Neuneu {
     
     /*   Methods   */
     public int[] determineCaseCible() {
-    
+        int[] toto = {};
+        return toto;
     }
 	
 	public void marcher() {
