@@ -6,6 +6,7 @@ import java.util.*;
 class Main {
 	protected String pathFichierConf;
 	
+	public static void main(String[] args) {}
 	public static Object getConf(String category, String param) {}
 }
 
