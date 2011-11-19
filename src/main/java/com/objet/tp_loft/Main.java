@@ -9,7 +9,7 @@ package com.objet.tp_loft;
  * @author tagazok
  */
 public class Main {
-    /*   Attributes   */
+    /***   Attributes   ***/
     protected String pathFichierConf;
     
     
