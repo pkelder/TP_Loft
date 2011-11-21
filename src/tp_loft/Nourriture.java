@@ -14,6 +14,8 @@ public class Nourriture extends Element {
     protected int valeurEnergetique;
 
     public Nourriture(String type, int valeurEnergetique) {
+    	this.type=type;
+    	this.valeurEnergetique=valeurEnergetique;
     }
 
     public int consommation() {
@@ -22,6 +24,10 @@ public class Nourriture extends Element {
         return 0;
     }
 
+    public String getType() {
+        return this.type;
+    }
+    
     public int getEnergie() {
         return 0;
     }
