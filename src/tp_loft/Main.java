@@ -77,10 +77,10 @@ public class Main {
 
     public static void initialisation() {
     	
-    	Loft loft=new Loft();
+    	
         // Instantie "new Case()" dans chaque case de "grille"
-    	for (int i=0;i<loft.largeurLoftX;i++){
-    		for (int j=0;j<loft.longueurLoftY;j++){
+    	for (int i=0;i<Loft.largeurLoftX;i++){
+    		for (int j=0;j<Loft.longueurLoftY;j++){
     			Case currentCase=new Case();
     		}
     	}
