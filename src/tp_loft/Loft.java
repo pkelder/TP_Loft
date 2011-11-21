@@ -15,8 +15,8 @@ public class Loft {
     protected Case[][] grille;
     protected static int largeurLoftX;
     protected static int longueurLoftY;
-    protected ArrayList<Nourriture> bouffeDispo;
-    protected static int periodeTour;  // Timer qui lance chaque tour
+    protected static ArrayList<Nourriture> bouffeDispo;
+    protected static int periodeTour;  // Timer qui lance chaque tour, en ms
     protected int nbNeuneuTotal;
 
     public Loft() {
