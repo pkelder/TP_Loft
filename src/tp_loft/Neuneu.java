@@ -58,12 +58,18 @@ public abstract class Neuneu extends Element {
     public abstract int[] determineCaseCible();
 
     public int getEnergie() {
-        return 0;
+        return this.energie ;
     }
 
-    public void setNom() {
+    public void setEnergie(int E) {
+        this.energie = E;        
     }
-
-    public void setEnergie() {
+    
+    public void setPosX(int x) {
+        this.posX = x;
+    }
+    
+    public void setPosY(int y) {
+        this.posY = y;
     }
 }
