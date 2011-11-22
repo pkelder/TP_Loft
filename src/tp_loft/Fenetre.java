@@ -4,24 +4,26 @@
  */
 package tp_loft;
 
-import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Iterator;
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 /**
- * Instancier la fen√™tre une fois que le loft est instanci√©
- * Appeler createWindow() juste apr√®s
- * Appeler drawLoft() √† chaque tour.
+ *
  * @author tagazok
  */
 public class Fenetre extends JFrame {
     /* Attributes */
 
-    private int largeurLoft;
+    /**
+	 * 
+	 */
+	//je ne sais pas à quoi ça sert...
+	private static final long serialVersionUID = 1L;
+	
+	private int largeurLoft;
     private int longueurLoft;
     private Loft loft;
     private JLabel[][] jLabelArray;
@@ -47,10 +49,6 @@ public class Fenetre extends JFrame {
         for (int i = 0; i < this.largeurLoft; i++) {
             for (int j = 0; j < this.longueurLoft; j++) {
                 this.jLabelArray[i][j] = new JLabel();
-                this.jLabelArray[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                this.jLabelArray[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                this.jLabelArray[i][j].setVerticalAlignment(SwingConstants.CENTER);
-                this.jLabelArray[i][j].setForeground(Color.RED);
                 this.getContentPane().add(this.jLabelArray[i][j]);
             }
         }
@@ -65,12 +63,18 @@ public class Fenetre extends JFrame {
 
         for (int i = 0; i < this.largeurLoft; i++) {
             for (int j = 0; j < this.longueurLoft; j++) {
-                iterator = this.loft.getGrille()[i][j].getNeuneus().iterator();
+            		
+            	ArrayList<Neuneu> currentList=this.loft.getGrille()[i][j].getNeuneus();
+            	if (currentList.isEmpty()){System.out.println("empty");}
+            	else{System.out.println("not empty"+currentList.size());
+            	
+            	iterator = currentList.iterator();
 
                 // On teste le type des Neuneu sur la case pour d√©terminer la lettre correspondante
                 label = "";
                 while (iterator.hasNext()) {
                     currNeuneu = iterator.next();
+         
                     if (currNeuneu.getClass().equals(Erratique.class)) {
                         label += "I";
                     } else if (currNeuneu.getClass().equals(Lapin.class)) {
@@ -81,11 +85,24 @@ public class Fenetre extends JFrame {
                         label += "C";
                     }
                 }
-
+            	
+                
+                //on teste si de la bouffe est présente sur la case
+                Nourriture currentNourriture=this.loft.getGrille()[i][j].getNourriture();
+                if (currentNourriture==null){System.out.println("pas de bouffe");}
+                else{
+                	label +="B";
+                }
+                
+          
                 // On affiche le label sur la case
+                //à ajouter: affichage des lignes, on ne différencie pas bien chaque case
                 this.jLabelArray[i][j].setText(label);
                 this.jLabelArray[i][j].repaint();
-            }
-        }
+                
+            	}
+            	}
+            	}
+        
     }
 }

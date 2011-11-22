@@ -15,6 +15,14 @@ public class Cannibale extends Neuneuphile {
         // Energie = EnergieMax
         // EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
     }
+    
+    public Cannibale(){
+    	super();
+    }
+    
+    public Cannibale(int x,int y){
+    	super(x,y);
+    }
 
     public void action() {
         // Si tout seul : bouffe

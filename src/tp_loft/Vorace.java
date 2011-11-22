@@ -4,6 +4,7 @@
  */
 package tp_loft;
 
+
 /**
  *
  * @author tagazok
@@ -15,8 +16,16 @@ public class Vorace extends Neuneu {
         // Energie = EnergieMax
         // EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
     }
+    
+    public Vorace(){
+    	super();
+    }
+    
+    public Vorace(int x,int y){
+    	super(x,y);
+    }
 
-    public int[] determineCaseCible() {
+    public int[] determineCaseCible(Loft loft) {
         // se dirige vers la cible qui est dans Neuneu. Cible = Nourriture
         return new int[1];
     }
