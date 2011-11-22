@@ -2,15 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package tp_loft;
 
 
-/**
- * 
- * @author tagazok
- */
-public class Vorace extends Neuneu {
+//CLASSE OK
 
+
+import java.util.*;
+
+class Vorace extends Non_Erratique {
 
 	public Vorace(Loft loft) {
 		super(loft);
@@ -19,86 +18,77 @@ public class Vorace extends Neuneu {
 		// listeBouffe : Lire fichier conf
 	}
 
-	public Vorace() {
-		super();
-	}
-
-	public Vorace(int x, int y) {
-		super(x, y);
-	}
-
-	public int[] determineCaseCible(Loft loft) {
-
-		// se dirige vers la cible qui est dans Neuneu. Cible = Nourriture
-
-		Case currentCaseCible = new Case(0, 0);
-		int currentMin = (int) this.calculDistance(this.getPosX(),
-				this.getPosY(), currentCaseCible.getPosX(),
-				currentCaseCible.getPosY());
-		int currentDistance = 0;
-
-		for (int i = 0; i < Loft.largeurLoftX; i++) {
-			for (int j = 0; j < Loft.longueurLoftY; j++) {
-
-				Case currentCase = loft.grille[i][j];
-				if (currentCase.aNourriture()) {
-
-					currentDistance = (int) this.calculDistance(this.getPosX(),
-							this.getPosY(), currentCase.getPosX(),
-							currentCase.getPosY());
-
-					if (currentDistance < currentMin) {
-						currentMin = currentDistance;
-						currentCaseCible = currentCase;
-					}
-				}
-			}
-		}
-
-		int[] coord = new int[2];
-		coord[0] = currentCaseCible.getPosX();
-		coord[1] = currentCaseCible.getPosY();
-		this.cible = currentCaseCible.getNourriture();
-		return coord;
-
+	public Vorace(int EM, int DM, int DS, int VE, int eM,
+			ArrayList<Nourriture> lB, Loft loft) {
+		super(eM, eM, eM, eM, eM, lB, loft);
 	}
 
 	public void action() {
-
-		// S'il est tout seul : il bouffe
-
-		Case currentCase = loft.grille[this.getPosX()][this.getPosY()];
-		if (!currentCase.fullNeuneu()) {
-			if (currentCase.aNourriture())
-				this.manger(currentCase.getNourriture());
+		
+		Case currentCase=loft.grille[this.positionX][this.positionY];
+		
+		//on regarde d'abord s'il y a de la bouffe
+		if ((currentCase.bouffe != null)&&(this.listeNourriture.contains(currentCase.bouffe))){
+			this.manger(currentCase.bouffe);
 		}
+		
+		//sinon, on cherche si un autre Neuneu est là. Si oui, on copule
+				if (this.estMature == 0){
+					if (currentCase.neuneuSurCase.size()>1){
+						int i=0;
+						while (currentCase.neuneuSurCase.get(i).nom == this.nom){
+							i=i+1;
+						}
+						Neuneu partenaire=currentCase.neuneuSurCase.get(i);
+						this.copuler(partenaire);
+					}
+				}		
+		
+		//s'il n'y a rien, on ne fait rien
+	}
 
-		// S'il est pas tout seul, il baise puis il bouffe
-		else {
+	
+	
+	public int[] determineCaseCible(Loft loft) {
 
-			// S'il est pas tout seul, il baise puis il bouffe
-                    for (Neuneu neuneu : currentCase.getNeuneus()){
-                        if (this != neuneu){
-                            //On v√©rifie que les deux neuneus sont de sexe diff√©rent
-                            boolean bebe = this.copuler(neuneu);
-
-                            if (bebe){
-                                //On cr√©√©e un nouveau neuneu du m√™me type que son parent actif
-                                //On le rajoute dans la case et dans le loft
-                                Vorace newVorace = new Vorace(this.getPosX(), this.getPosY());
-                                currentCase.ajouterNeuneu(newVorace);
-                                loft.ajoutListeNeuneu(newVorace);
-                            }
-
-                        }
-                    }
-                    
-                    if (currentCase.aNourriture()){
-    			this.manger(currentCase.getNourriture());
-                        loft.supprimerBouffe(currentCase.getNourriture());
-                    }
-
+		// la solution proposée ici n'est pas optimale.
+		
+		ArrayList<Case> listeCase = null;
+		ArrayList<Integer> distances=new ArrayList();
+		int currentmin = 0;
+		
+		for (int i=0;i<loft.largeurLoftX;i++){
+			
+			for (int j=0;j<loft.longueurLoftY;j++){
+				
+		Case currentCase=loft.grille[i][j];
+		
+			if (currentCase.bouffe != null) {
+				
+					listeCase.add(currentCase);
+					//on ajouter la distance au Neuneu à la ArrayListe distance
+					
+					int currentDistance = (int) Math.sqrt((this.positionX - i) * 2
+									+ (this.positionY - j) * 2);
+					currentmin = Math.max(currentmin, currentDistance);
+					distances.add(currentDistance);
+				}
+			}
 		}
-    }
+		
+
+		// on a  la liste de toutes les cases contenant de la bouffe sur le plateau, ainsi que leur distance au Neuneu
+		// On choisit la plus petite
+		
+		int indexmin = distances.indexOf(currentmin);
+		Case caseCible = listeCase.get(indexmin);
+
+		int[] cible=new int[2];
+		cible[0]=caseCible.caseX;
+		cible[1]=caseCible.caseY;
+		return cible;
+		
+	}
+
 
 }
