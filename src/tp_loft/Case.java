@@ -55,6 +55,10 @@ public class Case {
         return !this.neuneuSurCase.isEmpty();
     }
 
+    public boolean fullNeuneu() {
+        return (this.neuneuSurCase.size() == 2) ? true : false;
+    }
+
     public void action() {
         // Appelle les action de la liste de Neuneu.
         // S'il y a deux Neuneu : aléatoire pour déterminer lequel fait l'action
@@ -71,7 +75,7 @@ public class Case {
     public ArrayList<Neuneu> getNeuneus() {
         return this.neuneuSurCase;
     }
-    
+
     public Nourriture getNourriture() {
         return this.bouffe;
     }

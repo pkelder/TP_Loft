@@ -5,6 +5,7 @@
 package tp_loft;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -33,12 +34,86 @@ public abstract class Neuneu extends Element {
 
     public void marcher() {
         // Décrémente estMature
-        // Appelle DeterminerCible() pour avoir les coordonnées
-        // Déplace le Neuneu vers les coordonnées, mais vérifie qu'il ne marche pas sur une case avec 2 Neuneu
-        //		Si la case est pas dispo, prend une des deux cases à coté
-        // Déplacement : S'enlever de la Case actuelle (celle des coordonnées en attribut du Neuneu)
-        //				Se mettre dans la Case correspondant aux nouvelles coordonnées
-        //				Mettre à jour les nouvelles coordonnées en attribut du Neuneu
+        this.estMature--;
+
+        // Case où se déplacer
+        int[] caseDeplacement = determineCaseDeplacement();
+
+        // Déplacement
+        this.loft.getGrille()[this.posX][this.posY].supprimerNeuneu(this);
+        this.loft.getGrille()[caseDeplacement[0]][caseDeplacement[1]].ajouterNeuneu(this);
+        this.posX = caseDeplacement[0];
+        this.posY = caseDeplacement[1];
+    }
+
+    /*
+     * Détermine la case où le Neuneu doit se déplacer
+     * La case doit être disponible (moins de 2 neuneus), et à la plus courte distance de la cible
+     */
+    private int[] determineCaseDeplacement() {
+        int absTest;
+        int ordTest;
+        float distancePlusCourte = Float.MAX_VALUE;
+        int deplacementPlusCourt = -1;
+        int[] result = new int[2];
+
+        // Liste des déplacements disponibles
+        LinkedList<Integer> deplacementX = new LinkedList<Integer>();
+        LinkedList<Integer> deplacementY = new LinkedList<Integer>();
+        deplacementX.add(1);
+        deplacementY.add(0);
+        deplacementX.add(1);
+        deplacementY.add(-1);
+        deplacementX.add(0);
+        deplacementY.add(-1);
+        deplacementX.add(-1);
+        deplacementY.add(-1);
+        deplacementX.add(-1);
+        deplacementY.add(0);
+        deplacementX.add(-1);
+        deplacementY.add(0);
+        deplacementX.add(-1);
+        deplacementY.add(1);
+        deplacementX.add(0);
+        deplacementY.add(1);
+
+        // Enlève des déplacements dispo les cases occupées
+        for (int i = 0; i < 8; i++) {
+            absTest = this.posX + deplacementX.get(i);
+            ordTest = this.posY + deplacementY.get(i);
+
+            if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
+                deplacementX.remove(i);
+                deplacementY.remove(i);
+            }
+        }
+
+        // Appelle DeterminerCible() pour avoir les coordonnées de l'objectif
+        int[] coordCible = determineCaseCible();
+
+        // On calcule la distance la plus courte entre les cases dispo restantes et la cible
+        int length = deplacementX.size();
+        float distanceTest;
+        for (int i = 0; i < length; i++) {
+            absTest = this.posX + deplacementX.get(i);
+            ordTest = this.posY + deplacementY.get(i);
+            distanceTest = calculDistance(absTest, ordTest, coordCible[0], coordCible[1]);
+
+            if (distanceTest < distancePlusCourte) {
+                distancePlusCourte = distanceTest;
+                deplacementPlusCourt = i;
+            }
+        }
+
+        // On retourne les coordonnées de la case libre dont la distance est la plus courte avec la cible
+        result[0] = this.posX + deplacementX.get(deplacementPlusCourt);
+        result[1] = this.posY + deplacementY.get(deplacementPlusCourt);
+
+        return result;
+    }
+
+    private float calculDistance(int originX, int originY, int cibleX, int cibleY) {
+        return (float) Math.sqrt((originY - cibleY) * (originY - cibleY) + (originX - cibleX) * (originX - cibleX));
     }
 
     public void manger(Element element) {
@@ -58,17 +133,17 @@ public abstract class Neuneu extends Element {
     public abstract int[] determineCaseCible();
 
     public int getEnergie() {
-        return this.energie ;
+        return this.energie;
     }
 
-    public void setEnergie(int E) {
-        this.energie = E;        
+    public void setEnergie(int e) {
+        this.energie = e;
     }
-    
+
     public void setPosX(int x) {
         this.posX = x;
     }
-    
+
     public void setPosY(int y) {
         this.posY = y;
     }
