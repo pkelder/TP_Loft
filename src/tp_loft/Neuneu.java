@@ -1,190 +1,185 @@
+//CLASSE OK
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package tp_loft;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 
-/**
- * 
- * @author tagazok
- */
-public abstract class Neuneu extends Element {
+import java.util.*;
+
+abstract class Neuneu extends Element {
+
+	/*** Attributes ***/
 
 	public static int HOMME = 1;
 	public static int FEMME = 0;
+
+	protected String nom;
 	protected int sexe;
 	protected int energie;
-	protected static int depenseMarcher;
-	protected static int depenseSexe;
-	protected int estMature; // D√©cr√©mente √† chaque tour. Peut copuler √† 0.
-	protected static int energieMax;
-	protected int posX;
-	protected int posY;
+	protected int depenseMarcher;
+	protected int depenseSexe;
+	protected int valeurEnergetique;
+	protected int estMature; // Décrémente à chaque tour. Peut copuler à 0.
+	protected int energieMax;
+	protected int positionX;
+	protected int positionY;
+
 	protected Element cible;
 	protected ArrayList<Nourriture> listeNourriture;
 	protected Loft loft;
 
+	/*** Constructors ***/
+
 	protected Neuneu(Loft loft) {
+		// Appelle setNom()
+		this.setNom();
 
-		// Sexe al√©atoire
+		// choix du sexe aléatoire
+		int r = (int) Math.random();
+		this.sexe = (r % 2);
+
 	}
 
-	protected Neuneu() {
+	public Neuneu(int EM, int DM, int DS, int VE, int eM,
+			ArrayList<Nourriture> lB, Loft loft) {
+		// en attendant de faire appelle au fichier de config
+
+		this.energieMax = EM;
+		this.depenseMarcher = DM;
+		this.depenseSexe = DS;
+		this.valeurEnergetique = VE;
+		this.estMature = eM;
+		this.listeNourriture = lB;
+		this.loft = loft;
 
 	}
 
-	protected Neuneu(int posX, int posY) {
-		this.posX = posX;
-		this.posY = posY;
+	/*** Methods ***/
+
+	public void setNom() {
+
+		// choix aléatoire de 3 lettres pour former le nom
+		String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String nom = "";
+		for (int x = 0; x < 3; x++) {
+			int i = (int) Math.floor(Math.random() * 52); // Si tu supprimes des
+															// lettres tu
+															// diminues ce nb
+			nom += chars.charAt(i);
+		}
+		this.nom = nom;
+
 	}
 
-	public void marcher() {
-        // D√©cr√©mente estMature
-        this.estMature--;
+	public void marcher(int caseCibleX, int caseCibleY) {
+		// vérification de l'énergie suffisante pour marcher
+		if (this.energie > this.depenseMarcher) {
+			// dépense son énergie pour marcher
+			this.energie = this.energie - this.depenseMarcher;
 
-        // Case o√π se d√©placer
-        int[] caseDeplacement = determineCaseDeplacement();
+			// voir si on rajoute un test de sortie de Loft ou si on considère
+			// que caseCible est tjs dans le loft
 
-        // D√©placement
-        this.loft.getGrille()[this.posX][this.posY].supprimerNeuneu(this);
-        this.loft.getGrille()[caseDeplacement[0]][caseDeplacement[1]].ajouterNeuneu(this);
-        this.posX = caseDeplacement[0];
-        this.posY = caseDeplacement[1];
-    }
+			float ratio = caseCibleX / caseCibleY;
 
-	/*
-     * D√©termine la case o√π le Neuneu doit se d√©placer
-     * La case doit √™tre disponible (moins de 2 neuneus), et √† la plus courte distance de la cible
-     */
-    private int[] determineCaseDeplacement() {
-        int absTest;
-        int ordTest;
-        float distancePlusCourte = Float.MAX_VALUE;
-        int deplacementPlusCourt = -1;
-        int[] result = new int[2];
+			Case currentCase = loft.grille[this.positionX][this.positionY];
+			currentCase.neuneuSurCase.remove(this);
 
-        // Liste des d√©placements disponibles
-        LinkedList<Integer> deplacementX = new LinkedList<Integer>();
-        LinkedList<Integer> deplacementY = new LinkedList<Integer>();
-        deplacementX.add(1);
-        deplacementY.add(0);
-        deplacementX.add(1);
-        deplacementY.add(-1);
-        deplacementX.add(0);
-        deplacementY.add(-1);
-        deplacementX.add(-1);
-        deplacementY.add(-1);
-        deplacementX.add(-1);
-        deplacementY.add(0);
-        deplacementX.add(-1);
-        deplacementY.add(0);
-        deplacementX.add(-1);
-        deplacementY.add(1);
-        deplacementX.add(0);
-        deplacementY.add(1);
+			if (ratio == 1) {
 
-        // Enl√®ve des d√©placements dispo les cases occup√©es
-        for (int i = 0; i < 8; i++) {
-            absTest = this.posX + deplacementX.get(i);
-            ordTest = this.posY + deplacementY.get(i);
-
-            if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
-                deplacementX.remove(i);
-                deplacementY.remove(i);
-            }
-        }
-
-        // Appelle DeterminerCible() pour avoir les coordonn√©es de l'objectif
-        int[] coordCible = determineCaseCible(this.loft);
-
-        // On calcule la distance la plus courte entre les cases dispo restantes et la cible
-        int length = deplacementX.size();
-        float distanceTest;
-        for (int i = 0; i < length; i++) {
-            absTest = this.posX + deplacementX.get(i);
-            ordTest = this.posY + deplacementY.get(i);
-            distanceTest = calculDistance(absTest, ordTest, coordCible[0], coordCible[1]);
-
-            if (distanceTest < distancePlusCourte) {
-                distancePlusCourte = distanceTest;
-                deplacementPlusCourt = i;
-            }
-        }
-
-        // On retourne les coordonn√©es de la case libre dont la distance est la plus courte avec la cible
-        result[0] = this.posX + deplacementX.get(deplacementPlusCourt);
-        result[1] = this.posY + deplacementY.get(deplacementPlusCourt);
-
-        return result;
-    }
-
-    private float calculDistance(int originX, int originY, int cibleX, int cibleY) {
-        return (float) Math.sqrt((originY - cibleY) * (originY - cibleY) + (originX - cibleX) * (originX - cibleX));
-    }
-
-
-	public void manger(Element element) {
-
-		if (element.getClass().equals(Nourriture.class)) {
-
-			int conso = ((Nourriture) element).consommation();
-			if ((Neuneu.energieMax - this.energie) < conso) {
-				this.energie = Neuneu.energieMax;
+				this.positionX++;
+				this.positionY++;
+				Case nextCase = loft.grille[this.positionX][this.positionY];
+				nextCase.neuneuSurCase.add(this);
 			} else {
-				this.energie += conso;
+				if (ratio < 1) {
+					this.positionY++;
+					Case nextCase2 = loft.grille[this.positionX][this.positionY];
+					nextCase2.neuneuSurCase.add(this);
+				} else {
+
+					this.positionX++;
+					Case nextCase3 = loft.grille[this.positionX][this.positionY];
+					nextCase3.neuneuSurCase.add(this);
+				}
+
+			}
+
+		}
+
+	}
+
+	public void manger(Nourriture bouffe) {
+
+		// test de la présence de ce type de bouffe dans la liste de ce qu'il
+		// peut manger
+		if (this.listeNourriture.contains(bouffe)) {
+			// test de la conso maximale
+			int EnergieManquante = energieMax - energie;
+			int consoPossible = bouffe.consommation(bouffe.valeurEnergetique);
+
+			Case currentCase = loft.grille[this.positionX][this.positionY];
+			if (EnergieManquante < consoPossible) {
+				// ajout de la valeur énergétique possible
+				this.energie = energieMax;
+				// enlever valeur sur case
+				currentCase.bouffe.valeurEnergetique = currentCase.bouffe.valeurEnergetique
+						- EnergieManquante;
+
+			} else {
+				this.energie = this.energie + consoPossible;
+				// enlever valeur sur case: on supprime la présence de
+				// nourriture sur cette case
+				currentCase.bouffe = null;
 			}
 		}
 
-		else { // on a un Neuneu: ne pas oublier d'inclure le test: peut manger
-			((Neuneu) element).energie = 0;
-			this.energie = Neuneu.energieMax;
-		}
 	}
 
-	public boolean copuler(Neuneu partenaire) {
+	public void copuler(Neuneu partenaire) {
+		// test si assez d'énergie
+		if ((this.energie > this.depenseSexe)
+				&& (partenaire.energie > partenaire.depenseSexe)) {
+			// perte de l'énergie de copulation
+			this.energie = this.energie - this.depenseSexe;
+			partenaire.energie = partenaire.energie - partenaire.depenseSexe;
 
-		if ((this.estMature == 0) && (partenaire.estMature == 0)) {
-			// Diminue l'√©nergie des partenaires.
-			this.energie = Math.max(0, Neuneu.depenseSexe);
-			partenaire.energie = Math.max(0, Neuneu.depenseSexe);
-
-			// true si sexe diff√©rent, flase si m√™me sexe
-
-			return (this.sexe != partenaire.sexe);
-		} else {
-			return false;
+			// vérification des sexes
+			if (this.sexe != partenaire.sexe) {
+				// création d'un nouveau Neuneu de type aléatoire
+				int random = (int) Math.random();
+				switch (random % 4) {
+				case 1:
+					Neuneu bebe = new Erratique(loft);
+					break;
+				case 2:
+					Neuneu bebe2 = new Lapin(loft);
+					break;
+				case 3:
+					Neuneu bebe3 = new Vorace(loft);
+					break;
+				case 4:
+					Neuneu bebe4 = new Cannibale(loft);
+					break;
+				}
+			}
 		}
 	}
 
 	public abstract void action();
 
-	public abstract int[] determineCaseCible(Loft loft);
+	public abstract int[] determineCaseCible();
 
-	public int getEnergie() {
-		return this.energie;
+	/***** Getters ******/
+
+	public int getPositionX() {
+		return this.positionX;
 	}
 
-	public void setEnergie(int E) {
-		this.energie = E;
+	public int getPositionY() {
+		return this.positionY;
 	}
 
-	public int getPosX() {
-		return this.posX;
-	}
-
-	public int getPosY() {
-		return this.posY;
-	}
-
-	public void setPosX(int x) {
-		this.posX = x;
-	}
-
-	public void setPosY(int y) {
-		this.posY = y;
-	}
-	
 }
