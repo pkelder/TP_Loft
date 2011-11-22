@@ -86,7 +86,7 @@ public abstract class Neuneu extends Element {
         deplacementY.add(1);
 
         // Enlève des déplacements dispo les cases occupées
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 7; i++) {
             absTest = this.posX + deplacementX.get(i);
             ordTest = this.posY + deplacementY.get(i);
 
@@ -113,7 +113,6 @@ public abstract class Neuneu extends Element {
 
         // Appelle DeterminerCible() pour avoir les coordonnées de l'objectif
         int[] coordCible = determineCaseCible(this.loft);
-
         // On calcule la distance la plus courte entre les cases dispo restantes et la cible
         int length = deplacementX.size();
         float distanceTest;
