@@ -4,26 +4,24 @@
  */
 package tp_loft;
 
+import java.awt.Color;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.Iterator;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
- *
+ * Instancier la fen√™tre une fois que le loft est instanci√©
+ * Appeler createWindow() juste apr√®s
+ * Appeler drawLoft() √† chaque tour.
  * @author tagazok
  */
 public class Fenetre extends JFrame {
     /* Attributes */
 
-    /**
-	 * 
-	 */
-	//je ne sais pas � quoi �a sert...
-	private static final long serialVersionUID = 1L;
-	
-	private int largeurLoft;
+    private int largeurLoft;
     private int longueurLoft;
     private Loft loft;
     private JLabel[][] jLabelArray;
@@ -36,19 +34,23 @@ public class Fenetre extends JFrame {
     }
 
     public void createWindow() {
-        // Titre de la fenêtre
+        // Titre de la fen√™tre
         this.setTitle("Loft Story by 3K, Siau, Loulou");
-        // Taille de la fenêtre en pixels
+        // Taille de la fen√™tre en pixels
         this.setSize(600, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        // La fenêtre contient une grille
+        // La fen√™tre contient une grille
         this.setLayout(new GridLayout(this.largeurLoft, this.longueurLoft));
 
-        // Intanciation des JLabel et on les met dans la grille de la fenêtre
+        // Intanciation des JLabel et on les met dans la grille de la fen√™tre
         for (int i = 0; i < this.largeurLoft; i++) {
             for (int j = 0; j < this.longueurLoft; j++) {
                 this.jLabelArray[i][j] = new JLabel();
+                this.jLabelArray[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                this.jLabelArray[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+                this.jLabelArray[i][j].setVerticalAlignment(SwingConstants.CENTER);
+                this.jLabelArray[i][j].setForeground(Color.RED);
                 this.getContentPane().add(this.jLabelArray[i][j]);
             }
         }
@@ -63,18 +65,12 @@ public class Fenetre extends JFrame {
 
         for (int i = 0; i < this.largeurLoft; i++) {
             for (int j = 0; j < this.longueurLoft; j++) {
-            		
-            	ArrayList<Neuneu> currentList=this.loft.getGrille()[i][j].getNeuneus();
-            	if (currentList.isEmpty()){System.out.println("empty");}
-            	else{System.out.println("not empty"+currentList.size());
-            	
-            	iterator = currentList.iterator();
+                iterator = this.loft.getGrille()[i][j].getNeuneus().iterator();
 
-                // On teste le type des Neuneu sur la case pour déterminer la lettre correspondante
+                // On teste le type des Neuneu sur la case pour d√©terminer la lettre correspondante
                 label = "";
                 while (iterator.hasNext()) {
                     currNeuneu = iterator.next();
-         
                     if (currNeuneu.getClass().equals(Erratique.class)) {
                         label += "I";
                     } else if (currNeuneu.getClass().equals(Lapin.class)) {
@@ -85,24 +81,11 @@ public class Fenetre extends JFrame {
                         label += "C";
                     }
                 }
-            	
-                
-                //on teste si de la bouffe est pr�sente sur la case
-                Nourriture currentNourriture=this.loft.getGrille()[i][j].getNourriture();
-                if (currentNourriture==null){System.out.println("pas de bouffe");}
-                else{
-                	label +="B";
-                }
-                
-          
+
                 // On affiche le label sur la case
-                //� ajouter: affichage des lignes, on ne diff�rencie pas bien chaque case
                 this.jLabelArray[i][j].setText(label);
                 this.jLabelArray[i][j].repaint();
-                
-            	}
-            	}
-            	}
-        
+            }
+        }
     }
 }

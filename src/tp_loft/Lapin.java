@@ -25,6 +25,7 @@ public class Lapin extends Neuneuphile {
 		super(x, y);
 	}
 
+    @Override
 	public void action() {
 		// S'il est tout seul : il bouffe
 		Case currentCase = loft.grille[this.getPosX()][this.getPosY()];
@@ -35,15 +36,27 @@ public class Lapin extends Neuneuphile {
 
 		// S'il est pas tout seul, il baise puis il bouffe
 		else {
-			if (currentCase.getNeuneus().get(0) != this) {
-				this.copuler(currentCase.getNeuneus().get(0));
-			} else {
-				this.copuler(currentCase.getNeuneus().get(1));
-			}
-			if (!currentCase.fullNeuneu()) {
-				if (currentCase.aNourriture())
-					this.manger(currentCase.getNourriture());
-			}
+			// S'il est pas tout seul, il baise puis il bouffe
+                    for (Neuneu neuneu : currentCase.getNeuneus()){
+                        if (this != neuneu){
+                            //On vérifie que les deux neuneus sont de sexe différent
+                            boolean bebe = this.copuler(neuneu);
+
+                            if (bebe){
+                                //On créée un nouveau neuneu du même type que son parent actif
+                                //On le rajoute dans la case et dans le loft
+                                Lapin newLapin = new Lapin(this.getPosX(), this.getPosY());
+                                currentCase.ajouterNeuneu(newLapin);
+                                loft.ajoutListeNeuneu(newLapin);
+                            }
+
+                        }
+                    }
+                    
+                    if (currentCase.aNourriture()){
+    			this.manger(currentCase.getNourriture());
+                        loft.supprimerBouffe(currentCase.getNourriture());
+                    }
 
 		}
 
