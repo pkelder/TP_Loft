@@ -42,7 +42,7 @@ public class Loft {
 				Case currentCase = this.grille[i][j];
 
 				if (currentCase.aNeuneu()) {
-					for (Neuneu neuneu : currentCase.neuneuSurCase) {
+					for (Neuneu neuneu : currentCase.getNeuneus()) {
 						neuneu.marcher();
 					}
 				}
@@ -63,7 +63,7 @@ public class Loft {
 				Case currentCase = this.grille[i][j];
 
 				if (currentCase.aNeuneu()) {
-					for (Neuneu neuneu : currentCase.neuneuSurCase) {
+					for (Neuneu neuneu : currentCase.getNeuneus()) {
 						if (neuneu.getEnergie() == 0)
 							this.supprimerNeuneu(neuneu);
                                                 
