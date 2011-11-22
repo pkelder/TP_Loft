@@ -113,7 +113,6 @@ public abstract class Neuneu extends Element {
 
         // Appelle DeterminerCible() pour avoir les coordonnées de l'objectif
         int[] coordCible = determineCaseCible(this.loft);
-
         // On calcule la distance la plus courte entre les cases dispo restantes et la cible
         int length = deplacementX.size();
         float distanceTest;

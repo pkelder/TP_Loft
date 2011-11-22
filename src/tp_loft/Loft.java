@@ -37,18 +37,12 @@ public class Loft {
 	public void tour() {
 
 		// Un balayage de la grille pour marcher()
-		for (int i = 0; i < Loft.largeurLoftX; i++) {
-			for (int j = 0; j < Loft.longueurLoftY; j++) {
-				Case currentCase = this.grille[i][j];
 
-				if (currentCase.aNeuneu()) {
-					
-                                        for (Neuneu neuneu : this.listeNeuneu) {
-                                                neuneu.marcher();
-                                        }
-				}
-			}
-		}
+		
+					for (Neuneu neuneu : this.listeNeuneu) {
+						neuneu.marcher();
+					}
+			
 
 		// un autre balayage pour action(),
 		for (int i = 0; i < Loft.largeurLoftX; i++) {
