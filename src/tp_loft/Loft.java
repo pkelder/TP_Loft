@@ -110,14 +110,14 @@ public class Loft {
         // Choix du type de neuneu au hasard
         int typeRandom = (int) (Math.random() * Loft.neuneuDispo.size());
         Neuneu neuneu = Loft.neuneuDispo.get(typeRandom);
-        
+
         // Random position
         int[] position = this.randomPosition(neuneu);
-        
+
         // Ajoute le Neuneu à la case
         this.grille[position[0]][position[1]].ajouterNeuneu(neuneu);
     }
-    
+
     private int[] randomPosition(Element element) {
         int[] result = new int[2];
         boolean libre = false;
@@ -130,15 +130,14 @@ public class Loft {
 
             if (element.getClass().equals(Nourriture.class) && !this.grille[x][y].aNourriture()) {
                 libre = true;
-            }
-            else if (element.getClass().equals(Neuneu.class) && !this.grille[x][y].aNeuneu()) {
+            } else if (element.getClass().equals(Neuneu.class) && !this.grille[x][y].aNeuneu()) {
                 libre = true;
             }
         }
-        
+
         result[0] = x;
         result[1] = y;
-        
+
         return result;
     }
 
