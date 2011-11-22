@@ -15,13 +15,35 @@ public class Erratique extends Neuneu {
         // Energie = EnergieMax
         // EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
     }
-
-    public void action() {
-        // S'il est tout seul : il bouffe
-        // S'il est pas tout seul, il baise puis il bouffe
+    
+    public Erratique(){
+    	super();
+    }
+    
+    public Erratique(int x,int y){
+    	super(x,y);
     }
 
-    public int[] determineCaseCible() {
+    public void action() {
+    	
+    	
+    	Case position=loft.grille[this.getPosX()][this.getPosY()];
+    	
+    	if (!position.aNeuneu()){
+        // S'il est tout seul : il bouffe
+    		if (position.aNourriture()){
+    			this.manger(position.getNourriture());
+    		}
+    	}
+    	else{
+    		
+    		
+        // S'il est pas tout seul, il baise puis il bouffe
+    }
+    	
+    }
+
+    public int[] determineCaseCible(Loft loft) {
         return new int[1];
     }
 }

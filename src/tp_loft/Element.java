@@ -10,6 +10,7 @@ package tp_loft;
  */
 public abstract class Element {
 
+
     protected Element() {
         // Lire pathLogo fichier conf
     }
