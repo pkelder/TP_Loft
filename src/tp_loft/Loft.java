@@ -57,8 +57,7 @@ public class Loft {
 			}
 		}
 
-		// un autre pour nettoyer les neuneus à zéro d'énergie (la bouffe est
-		// supprimée dans manger() )
+		// un autre pour nettoyer les neuneus à zéro d'énergie et la bouffe à 0 également
 		for (int i = 0; i < Loft.largeurLoftX; i++) {
 			for (int j = 0; j < Loft.longueurLoftY; j++) {
 				Case currentCase = this.grille[i][j];
@@ -66,9 +65,17 @@ public class Loft {
 				if (currentCase.aNeuneu()) {
 					for (Neuneu neuneu : currentCase.neuneuSurCase) {
 						if (neuneu.getEnergie() == 0)
-							currentCase.supprimerNeuneu(neuneu);
+							this.supprimerNeuneu(neuneu);
+                                                
 					}
 				}
+                                
+                                if (currentCase.aNourriture()) {
+                                        if (currentCase.bouffe.getEnergie() == 0){
+                                            currentCase.supprimerNourriture();
+                                            this.listeNourriture.remove(currentCase.bouffe);
+                                        }
+                                }
 
 			}
 		}
@@ -192,8 +199,14 @@ public class Loft {
 	public ArrayList<Neuneu> getListeNeuneu() {
 		return this.listeNeuneu;
 	}
+        
+        public void ajoutListeNeuneu(Neuneu neuneu){
+                this.listeNeuneu.add(neuneu);
+        }
 	
 	public ArrayList<Nourriture> getListeNourriture() {
 		return this.listeNourriture;
 	}
+        
+        
 }
