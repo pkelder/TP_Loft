@@ -19,6 +19,11 @@ public class Case {
 
     public Case() {
     }
+    
+    public Case(int x, int y){
+        this.X = x;
+        this.Y = y;
+    }
 
     public void ajouterNeuneu(Neuneu neuneu) {
         if (this.neuneuSurCase.size()<2){
