@@ -1,93 +1,92 @@
-//CLASSE OK
-
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+package tp_loft;
 
+import java.util.ArrayList;
 
-import java.util.*;
+/**
+ *
+ * @author tagazok
+ */
+public class Case {
 
-class Case {
+    protected ArrayList<Neuneu> neuneuSurCase;
+    protected Nourriture bouffe;
+    protected int X;
+    protected int Y;
 
-	/*** Attributes ***/
+    public Case() {
+    	 this.neuneuSurCase=new ArrayList<Neuneu> ();
+    	 this.bouffe=null;
+    }
+    
+    public Case(int x, int y){
+        this.X = x;
+        this.Y = y;
+        this.neuneuSurCase=new ArrayList<Neuneu> ();
+        this.bouffe=null;
+    }
 
-	protected int caseX;
-	protected int caseY;
-	protected ArrayList<Neuneu> neuneuSurCase;
-	protected Nourriture bouffe;
+    public void ajouterNeuneu(Neuneu neuneu) {
+        if (this.neuneuSurCase.size()<2){
+            this.neuneuSurCase.add(neuneu);
+        }
+    }
 
-	/*** Contructors ***/
+    public void supprimerNeuneu(Neuneu neuneu) {
+        this.neuneuSurCase.remove(neuneu);
+    }
 
-	public Case(int x, int y) {
-		this.caseX = x;
-		this.caseY = y;
-	}
+    public void ajouterNourriture(Nourriture nourriture) {
+        if (this.bouffe == null) this.bouffe = nourriture;
+    }
 
-	public Case() {
+    public void supprimerNourriture() {
+        this.bouffe = null;
+    }
 
-	}
+    public boolean aNourriture() {
+        return this.bouffe!=null ;
+    }
 
-	/*** Methods ***/
+    public boolean aNeuneu() {
+        return !this.neuneuSurCase.isEmpty() ;
+    }
 
-	public void ajoutNeuneu(Neuneu neuneu) {
-		this.neuneuSurCase.add(neuneu);
-		neuneu.positionX = this.caseX;
-		neuneu.positionY = this.caseY;
-	}
+    public boolean fullNeuneu() {
+        return (this.neuneuSurCase.size() == 2) ? true : false;
+    }
 
-	public void ajoutBouffe(Nourriture bouffe) {
-		if (this.bouffe != null) {
-			// on teste si le type de nourriture est le mme
-			if (this.bouffe.type == bouffe.type) {
-				// on rajoute de la nourriture
-				this.bouffe.valeurEnergetique = this.bouffe.valeurEnergetique
-						+ bouffe.valeurEnergetique;
-			}
-		} else {
-			// s'il n'y a pas de bouffe sur la case, on en met
-			this.bouffe = bouffe;
-		}
+    public void action() {
+        // Appelle les action de la liste de Neuneu.
+        // S'il y a deux Neuneu : alÃ©atoire pour dÃ©terminer lequel fait l'action
+        if (this.aNeuneu()) {
+            if (this.neuneuSurCase.size() == 2) {
+                int random = (int) (Math.random() * 2);
+                this.neuneuSurCase.get(random).action();
+            } else {
+                this.neuneuSurCase.get(0).action();
+            }
+        }
+    }
+    
+    
 
-	}
-
-	public void supprimerNeuneu(Neuneu neuneu) {
-		this.neuneuSurCase.remove(neuneu);
-	}
-
-	public void supprimerBouffe(Nourriture bouffe) {
-		if (this.bouffe.type == bouffe.type) {
-			this.bouffe = null;
-		}
-
-	}
-
-	// public boolean estLibre() {}
-
-	public boolean aUnNeuneu() {
-		return this.neuneuSurCase.size() != 0;
-	}
-
-	public boolean contientBouffe() {
-		return bouffe != null;
-	}
-
-	public void action() {
-		for (Neuneu currentNeuneu : neuneuSurCase) {
-			// Appelle les action de la liste de Neuneu. Gre les conflits
-			currentNeuneu.action();
-		}
-	}
-
-	/**** Getters ****/
-
-	public int getCaseX() {
-		return this.caseX;
-	}
-
-	public int getCaseY() {
-		return this.caseY;
-	}
-
+    public ArrayList<Neuneu> getNeuneus() {
+        return this.neuneuSurCase;
+    }
+    
+    public Nourriture getNourriture(){
+    	return this.bouffe;
+    }
+    
+    public int getPosX(){
+    	return this.X;
+    }
+    
+    public int getPosY(){
+    	return this.Y;
+    }
 }

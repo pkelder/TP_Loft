@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package tp_loft;
 
 import java.util.ArrayList;
 
@@ -11,136 +11,202 @@ import java.util.ArrayList;
  * @author tagazok
  */
 public class Loft {
-	/* Attributes */
+
 	protected Case[][] grille;
-	protected int largeurLoftX;
-	protected int longueurLoftY;
-	protected ArrayList<Nourriture> bouffeDispo;
-	protected int periodePrimeTime;
-	protected int tempsJusquaPrimeTime;
+	protected static int largeurLoftX;
+	protected static int longueurLoftY;
+	protected static ArrayList<Nourriture> bouffeDispo;
+	protected static int periodeTour; // Timer qui lance chaque tour, en ms
+	protected int nbNeuneuTotal;
+	protected ArrayList<Neuneu> listeNeuneu;
+	protected ArrayList<Nourriture> listeNourriture;
 
-	/* Constructors */
 	public Loft() {
-		// getConf() : longueur, largeur, listeBouffe, p√©riodePrimeTime
-	}
+		this.grille = new Case[Loft.largeurLoftX][Loft.longueurLoftY];
+		this.listeNeuneu = new ArrayList<Neuneu>();
+		this.listeNourriture=new ArrayList<Nourriture>();
 
-	public Loft(int largeur, int longueur) {
-		this.largeurLoftX = largeur;
-		this.longueurLoftY = longueur;
-		for (int i = 0; i < largeur; i++) {
-			for (int j = 0; j < longueur; j++) {
-				this.grille[i][j] = new Case();
+		for (int i = 0; i < Loft.largeurLoftX; i++) {
+			for (int j = 0; j < Loft.longueurLoftY; j++) {
+				this.grille[i][j] = new Case(i, j);
 			}
 		}
+
 	}
 
-	/* Methods */
 	public void tour() {
-		// J'ai oublié ce que fais PrimeTime, à rajouter donc.
 
-		// 1er parcours des cases
-		for (int i = 0; i < this.largeurLoftX; i++) {
-			for (int j = 0; j < this.longueurLoftY; j++) {
+		// Un balayage de la grille pour marcher()
+		for (int i = 0; i < Loft.largeurLoftX; i++) {
+			for (int j = 0; j < Loft.longueurLoftY; j++) {
 				Case currentCase = this.grille[i][j];
 
-				// Pour chaque Neuneu: détermination d'une cible puis un pas
-				// vers elle
-				if (!currentCase.neuneuSurCase.isEmpty()) {
+				if (currentCase.aNeuneu()) {
 					for (Neuneu neuneu : currentCase.neuneuSurCase) {
-						int[] cible = neuneu.determineCaseCible();
-						neuneu.marcher(cible[0], cible[1]);
+						neuneu.marcher();
 					}
 				}
 			}
 		}
 
-		// Second parcours des cases
-		for (int i = 0; i < this.largeurLoftX; i++) {
-			for (int j = 0; j < this.longueurLoftY; j++) {
+		// un autre balayage pour action(),
+		for (int i = 0; i < Loft.largeurLoftX; i++) {
+			for (int j = 0; j < Loft.longueurLoftY; j++) {
 				Case currentCase = this.grille[i][j];
-				// Pour chaque Neuneu: action
-				if (!currentCase.neuneuSurCase.isEmpty()) {
+				currentCase.action();
+			}
+		}
+
+		// un autre pour nettoyer les neuneus √† z√©ro d'√©nergie et la bouffe √† 0 √©galement
+		for (int i = 0; i < Loft.largeurLoftX; i++) {
+			for (int j = 0; j < Loft.longueurLoftY; j++) {
+				Case currentCase = this.grille[i][j];
+
+				if (currentCase.aNeuneu()) {
 					for (Neuneu neuneu : currentCase.neuneuSurCase) {
-						neuneu.action();
+						if (neuneu.getEnergie() == 0)
+							this.supprimerNeuneu(neuneu);
+                                                
 					}
 				}
+                                
+                                if (currentCase.aNourriture()) {
+                                        if (currentCase.bouffe.getEnergie() == 0){
+                                            currentCase.supprimerNourriture();
+                                            this.listeNourriture.remove(currentCase.bouffe);
+                                        }
+                                }
 
 			}
 		}
 
-		// Dernier parcours: suppression des Neuneu sans vie
-		for (int i = 0; i < this.largeurLoftX; i++) {
-			for (int j = 0; j < this.longueurLoftY; j++) {
-				Case currentCase = this.grille[i][j];
-				if (!currentCase.neuneuSurCase.isEmpty()) {
-					for (Neuneu neuneu : currentCase.neuneuSurCase) {
-						if (neuneu.energie == 0) {
-							currentCase.supprimerNeuneu(neuneu);
-						}
-					}
-				}
-			}
+		// Random pour le nombre de bouffe et de neuneu √† rajouter
+
+		int nbBouffe = (int) (Math.random() * 5);
+		int nbNeuneu = (int) (Math.random() * 2);
+
+		for (int i = 0; i < nbBouffe; i++) {
+			this.ajoutBouffe();
 		}
 
-		// Ajout de nourriture et/ou Neuneu aléatoirement
-		// si le nombre obtenu est congru à 0 modulo 3: on rajoute de la bouffe
-		// si le nombre obtenu est congru à 1 modulo 3: on rajoute un neuneu
-		// si le nombre obtenu est congru à 2 modulo 3: rien ne se passe
-		int random = (int) Math.random();
+		if (nbNeuneu == 1)
+			this.ajoutNeuneu();
 
-		if (random % 3 == 0) {
-			// à modifier avec fichier config: choisir le type de nourriture
-			// aléatoirement
+	}
 
-			Nourriture newbouffe = new Nourriture("Fraises", 400);
-			this.ajoutBouffe(newbouffe);
-		} else {
-			if (random % 3 == 1) {
-				//à modifier: le Neuneu est abstrait, on ne peut pas créer
-				
-				int EM = (int) Math.random();
-				int typeNeuneu=(int)Math.random()%4;
-				switch (typeNeuneu){
-				case 1: typeNeuneu=0;
-					Cannibale newNeuneu = new Cannibale(EM, (int) Math.random() % EM,
-						(int) Math.random() % EM, (int) Math.random() % EM, 2,
-						new ArrayList<Nourriture>(), this);
-				
-				case 2: typeNeuneu=1;
-					
-					Vorace newVorace = new Vorace(EM, (int) Math.random() % EM,
-						(int) Math.random() % EM, (int) Math.random() % EM, 2,
-						new ArrayList<Nourriture>(), this);
-				
-				}
-				
-			}
+	public void ajoutBouffe() {
+		// random type
+		int typeRandom = (int) (Math.random() * Loft.bouffeDispo.size());
+		Nourriture Bouffe = Loft.bouffeDispo.get(typeRandom);
+
+		// random position + v√©rifier case libre
+		boolean libre = false;
+		int x = 0;
+		int y = 0;
+
+		while (!libre) {
+
+			x = (int) (Math.random() * Loft.largeurLoftX);
+			y = (int) (Math.random() * Loft.longueurLoftY);
+
+			if (!this.grille[x][y].aNourriture())
+				libre = true;
+
+		}
+
+		// ajouter Bouffe dans la case s√©lectionn√©e
+		this.grille[x][y].ajouterNourriture(Bouffe);
+		this.listeNourriture.add(Bouffe);
+
+	}
+
+	public void ajoutNeuneu() {
+		// Choix du type de neuneu au hasard + random position
+		int n = (int) (Math.random() * 4);
+
+		// random position + v√©rifier case libre
+		boolean libre = false;
+		int x = 0;
+		int y = 0;
+
+		while (!libre) {
+
+			x = (int) (Math.random() * Loft.largeurLoftX);
+			y = (int) (Math.random() * Loft.longueurLoftY);
+
+			if (!this.grille[x][y].aNeuneu())
+				libre = true;
+
+		}
+
+		switch (n) {
+		case 1:
+			n = 0;
+			Erratique newErratique = new Erratique(x, y,this);
+			newErratique.setPosX(x);
+			newErratique.setPosY(y);
+			this.grille[x][y].ajouterNeuneu(newErratique);
+			this.listeNeuneu.add(newErratique);
+			break;
+
+		case 2:
+			n = 1;
+			Vorace newVorace = new Vorace(x, y,this);
+			this.grille[x][y].ajouterNeuneu(newVorace);
+			this.listeNeuneu.add(newVorace);
+			break;
+
+		case 3:
+			n = 2;
+			Lapin newLapin = new Lapin(x, y,this);
+			this.grille[x][y].ajouterNeuneu(newLapin);
+			this.listeNeuneu.add(newLapin);
+			break;
+
+		case 4:
+			n = 3;
+			Cannibale newCannibale = new Cannibale(x, y,this);
+			this.grille[x][y].ajouterNeuneu(newCannibale);
+			this.listeNeuneu.add(newCannibale);
+			break;
 		}
 
 	}
-
-	public void ajoutBouffe(Nourriture bouffe) {
-		// où fait-on le random choix bouffe+quantité?
-		int posX = (int) Math.random() % this.largeurLoftX;
-		int posY = (int) Math.random() % this.longueurLoftY;
-
-		Case currentCase = this.grille[posX][posY];
-		currentCase.ajoutBouffe(bouffe);
-
+	
+	public void supprimerBouffe(Nourriture n){
+		n.setEnergie(0);
+		this.listeNourriture.remove(n);
+	}
+	
+	public void supprimerNeuneu(Neuneu neuneu){
+		Case caseN=this.grille[neuneu.getPosX()][neuneu.getPosY()];
+		caseN.supprimerNeuneu(neuneu);
+		this.listeNeuneu.remove(neuneu);
 	}
 
-	public void ajoutNeuneu(Neuneu neuneu) {
-
-		int posX = (int) Math.random() % this.largeurLoftX;
-		int posY = (int) Math.random() % this.longueurLoftY;
-
-		Case currentCase = this.grille[posX][posY];
-		currentCase.ajoutNeuneu(neuneu);
-
+	public int getnbNeuneuTotal() {
+		return this.nbNeuneuTotal;
 	}
 
-	public void primeTime() {
-		// Teste s'il y a primetime
-		// Ajoute nourriture + neuneus
+	public void setnbNeuneuTotal(int i) {
+		this.nbNeuneuTotal = i;
 	}
+
+	public Case[][] getGrille() {
+		return this.grille;
+	}
+
+	public ArrayList<Neuneu> getListeNeuneu() {
+		return this.listeNeuneu;
+	}
+        
+        public void ajoutListeNeuneu(Neuneu neuneu){
+                this.listeNeuneu.add(neuneu);
+        }
+	
+	public ArrayList<Nourriture> getListeNourriture() {
+		return this.listeNourriture;
+	}
+        
+        
 }

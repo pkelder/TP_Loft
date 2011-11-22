@@ -1,43 +1,40 @@
-//CLASSE OK
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+package tp_loft;
 
+/**
+ *
+ * @author tagazok
+ */
+public class Nourriture extends Element {
 
+    protected String type;
+    protected int valeurEnergetique;
 
+    public Nourriture(String type, int valeurEnergetique) {
+    	this.type=type;
+    	this.valeurEnergetique=valeurEnergetique;
+    }
 
-class Nourriture extends Element {
-	/*** Attributes ***/
+    public int consommation() {
+        // Renvoie la quantité de nourriture maxi possible
+        // puis met l'énergie à zéro
+        int tmp=this.valeurEnergetique;
+        this.valeurEnergetique=0;
+        return tmp;
+    }
 
-	protected String type;
-	protected int valeurEnergetique;
+    public String getType() {
+        return this.type;
+    }
+    
+    public int getEnergie() {
+        return this.valeurEnergetique;
+    }
 
-	/*** Constructors ***/
-
-	public Nourriture(String type, int valeurEnergetique) {
-		this.type = type;
-		this.valeurEnergetique = valeurEnergetique;
-
-	}
-
-	/*** Methods ***/
-
-	public int consommation(int nourritureDemandee) {
-		
-		// Renvoie la quantit� de nourriture maxi possible
-		int nourriturePossible = this.valeurEnergetique;
-		if (nourriturePossible > nourritureDemandee)
-			return nourritureDemandee;
-		else
-			return nourriturePossible;
-
-	}
-
-	/*** Getters ***/
-
-	public String getType() {
-		return this.type;
-	}
+    public void setEnergie(int E) {
+    	this.valeurEnergetique=E;
+    }
 }

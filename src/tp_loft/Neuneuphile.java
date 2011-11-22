@@ -23,8 +23,8 @@ public abstract class Neuneuphile extends Neuneu {
 		super();
 	}
 
-	public Neuneuphile(int x, int y) {
-		super(x, y);
+	public Neuneuphile(int x, int y,Loft loft) {
+		super(x, y,loft);
 	}
 
 	public int[] determineCaseCible(Loft loft) {
