@@ -24,6 +24,7 @@ public class Case {
         this.X = x;
         this.Y = y;
         this.neuneuSurCase = new ArrayList<Neuneu>();
+        this.bouffe = null;
     }
 
     public void ajouterNeuneu(Neuneu neuneu) {
@@ -58,18 +59,20 @@ public class Case {
         // Appelle les action de la liste de Neuneu.
         // S'il y a deux Neuneu : aléatoire pour déterminer lequel fait l'action
         if (this.aNeuneu()) {
-
             if (this.neuneuSurCase.size() == 2) {
                 int random = (int) (Math.random() * 2);
                 this.neuneuSurCase.get(random).action();
             } else {
-                this.neuneuSurCase.get(1).action();
+                this.neuneuSurCase.get(0).action();
             }
-
         }
     }
 
     public ArrayList<Neuneu> getNeuneus() {
         return this.neuneuSurCase;
+    }
+    
+    public Nourriture getNourriture() {
+        return this.bouffe;
     }
 }
