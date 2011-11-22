@@ -69,8 +69,8 @@ public class Erratique extends Neuneu {
         
         int coord[] = new int[2];
         //Choix d'une case au hasard
-        coord[1] = (int) (Math.random() * Loft.largeurLoftX);
-        coord[2] = (int) (Math.random() * Loft.longueurLoftY);
+        coord[0] = (int) (Math.random() * Loft.largeurLoftX);
+        coord[1] = (int) (Math.random() * Loft.longueurLoftY);
         
         return coord;
     }

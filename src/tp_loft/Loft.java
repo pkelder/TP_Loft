@@ -42,9 +42,10 @@ public class Loft {
 				Case currentCase = this.grille[i][j];
 
 				if (currentCase.aNeuneu()) {
-					for (Neuneu neuneu : currentCase.getNeuneus()) {
-						neuneu.marcher();
-					}
+					
+                                        for (Neuneu neuneu : this.listeNeuneu) {
+                                                neuneu.marcher();
+                                        }
 				}
 			}
 		}
