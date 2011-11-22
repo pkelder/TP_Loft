@@ -5,10 +5,11 @@
 package tp_loft;
 
 /**
- *
+ * 
  * @author tagazok
  */
 public class Cannibale extends Neuneuphile {
+
 
     public Cannibale(Loft loft) {
         super(loft);
@@ -54,4 +55,6 @@ public class Cannibale extends Neuneuphile {
         }
         
     }
+
+	
 }
