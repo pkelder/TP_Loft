@@ -13,36 +13,34 @@ import java.util.LinkedList;
  */
 public abstract class Neuneu extends Element {
 
-	public static int HOMME = 1;
-	public static int FEMME = 0;
-	protected int sexe;
-	protected int energie;
-	protected static int depenseMarcher;
-	protected static int depenseSexe;
-	protected int estMature; // Décrémente à chaque tour. Peut copuler à 0.
-	protected static int energieMax;
-	protected int posX;
-	protected int posY;
-	protected Element cible;
-	protected ArrayList<Nourriture> listeNourriture;
-	protected Loft loft;
+    public static int HOMME = 1;
+    public static int FEMME = 0;
+    protected int sexe;
+    protected int energie;
+    protected static int depenseMarcher;
+    protected static int depenseSexe;
+    protected int estMature; // Décrémente à chaque tour. Peut copuler à 0.
+    protected static int energieMax;
+    protected int posX;
+    protected int posY;
+    protected Element cible;
+    protected ArrayList<Nourriture> listeNourriture;
+    protected Loft loft;
 
-	protected Neuneu(Loft loft) {
+    protected Neuneu(Loft loft) {
+        // Sexe aléatoire
+    }
 
-		// Sexe aléatoire
-	}
+    protected Neuneu() {
+    }
 
-	protected Neuneu() {
+    protected Neuneu(int posX, int posY, Loft loft) {
+        this.posX = posX;
+        this.posY = posY;
+        this.loft = loft;
+    }
 
-	}
-
-	protected Neuneu(int posX, int posY,Loft loft) {
-		this.posX = posX;
-		this.posY = posY;
-		this.loft=loft;
-	}
-
-	public void marcher() {
+    public void marcher() {
         // Décrémente estMature
         this.estMature--;
 
@@ -56,7 +54,7 @@ public abstract class Neuneu extends Element {
         this.posY = caseDeplacement[1];
     }
 
-	/*
+    /*
      * Détermine la case où le Neuneu doit se déplacer
      * La case doit être disponible (moins de 2 neuneus), et à la plus courte distance de la cible
      */
@@ -92,7 +90,21 @@ public abstract class Neuneu extends Element {
             absTest = this.posX + deplacementX.get(i);
             ordTest = this.posY + deplacementY.get(i);
 
-          System.out.println(absTest+" "+ordTest);
+            // Gestions des effets de bord
+            if (absTest < 0) {
+                absTest = 0;
+            } else if (absTest >= Loft.largeurLoftX) {
+                absTest = Loft.largeurLoftX - 1;
+            }
+            if (ordTest < 0) {
+                ordTest = 0;
+            } else if (ordTest >= Loft.longueurLoftY) {
+                ordTest = Loft.longueurLoftY - 1;
+            }
+
+            // Test si la case est vide
+
+            System.out.println(absTest + " " + ordTest);
             if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
                 deplacementX.remove(i);
                 deplacementY.remove(i);
@@ -127,66 +139,62 @@ public abstract class Neuneu extends Element {
         return (float) Math.sqrt((originY - cibleY) * (originY - cibleY) + (originX - cibleX) * (originX - cibleX));
     }
 
+    public void manger(Element element) {
 
-	public void manger(Element element) {
+        if (element.getClass().equals(Nourriture.class)) {
 
-		if (element.getClass().equals(Nourriture.class)) {
+            int conso = ((Nourriture) element).consommation();
+            if ((Neuneu.energieMax - this.energie) < conso) {
+                this.energie = Neuneu.energieMax;
+            } else {
+                this.energie += conso;
+            }
+        } else { // on a un Neuneu: ne pas oublier d'inclure le test: peut manger
+            ((Neuneu) element).energie = 0;
+            this.energie = Neuneu.energieMax;
+        }
+    }
 
-			int conso = ((Nourriture) element).consommation();
-			if ((Neuneu.energieMax - this.energie) < conso) {
-				this.energie = Neuneu.energieMax;
-			} else {
-				this.energie += conso;
-			}
-		}
+    public boolean copuler(Neuneu partenaire) {
 
-		else { // on a un Neuneu: ne pas oublier d'inclure le test: peut manger
-			((Neuneu) element).energie = 0;
-			this.energie = Neuneu.energieMax;
-		}
-	}
+        if ((this.estMature == 0) && (partenaire.estMature == 0)) {
+            // Diminue l'énergie des partenaires.
+            this.energie = Math.max(0, Neuneu.depenseSexe);
+            partenaire.energie = Math.max(0, Neuneu.depenseSexe);
 
-	public boolean copuler(Neuneu partenaire) {
+            // true si sexe différent, flase si même sexe
 
-		if ((this.estMature == 0) && (partenaire.estMature == 0)) {
-			// Diminue l'énergie des partenaires.
-			this.energie = Math.max(0, Neuneu.depenseSexe);
-			partenaire.energie = Math.max(0, Neuneu.depenseSexe);
+            return (this.sexe != partenaire.sexe);
+        } else {
+            return false;
+        }
+    }
 
-			// true si sexe différent, flase si même sexe
+    public abstract void action();
 
-			return (this.sexe != partenaire.sexe);
-		} else {
-			return false;
-		}
-	}
+    public abstract int[] determineCaseCible(Loft loft);
 
-	public abstract void action();
+    public int getEnergie() {
+        return this.energie;
+    }
 
-	public abstract int[] determineCaseCible(Loft loft);
+    public void setEnergie(int E) {
+        this.energie = E;
+    }
 
-	public int getEnergie() {
-		return this.energie;
-	}
+    public int getPosX() {
+        return this.posX;
+    }
 
-	public void setEnergie(int E) {
-		this.energie = E;
-	}
+    public int getPosY() {
+        return this.posY;
+    }
 
-	public int getPosX() {
-		return this.posX;
-	}
+    public void setPosX(int x) {
+        this.posX = x;
+    }
 
-	public int getPosY() {
-		return this.posY;
-	}
-
-	public void setPosX(int x) {
-		this.posX = x;
-	}
-
-	public void setPosY(int y) {
-		this.posY = y;
-	}
-	
+    public void setPosY(int y) {
+        this.posY = y;
+    }
 }
