@@ -21,7 +21,11 @@ import javax.swing.SwingConstants;
 public class Fenetre extends JFrame {
     /* Attributes */
 
-    private int largeurLoft;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int largeurLoft;
     private int longueurLoft;
     private Loft loft;
     private JLabel[][] jLabelArray;

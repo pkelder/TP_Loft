@@ -1,65 +1,77 @@
-//CLASSE OK
-
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package tp_loft;
 
 /**
  *
  * @author tagazok
  */
 public class Erratique extends Neuneu {
-    /*   Contructors   */
-    public Erratique(Loft loft) {
-		super(loft);
-		// Energie = EnergieMax
-		// EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
-	}
-	
-    
-    /*   Methods   */
-	public void action() {
-		
-Case currentCase=loft.grille[this.positionX][this.positionY];
 
-		//on regarde d'abord s'il y a de la bouffe
-		if ((currentCase.bouffe != null)&&(this.listeNourriture.contains(currentCase.bouffe))){
-			this.manger(currentCase.bouffe);
-		}
-		
-		//sinon, on cherche si un autre Neuneu est l�. Si oui, on copule
-				if (this.estMature == 0){
-					if (currentCase.neuneuSurCase.size()>1){
-						int i=0;
-						while (currentCase.neuneuSurCase.get(i).nom == this.nom){
-							i=i+1;
-						}
-						Neuneu partenaire=currentCase.neuneuSurCase.get(i);
-						this.copuler(partenaire);
-					}
-				}		
-		
-		//s'il n'y a rien, on ne fait rien
-		
-		
-    
+    public Erratique(Loft loft) {
+        super(loft);
+        // Energie = EnergieMax
+        // EnergieMax, depenseMrcher, depenseSexe, Valeurenergetique, estMature, listeBouffe : Lire fichier conf
     }
     
-	public int[] determineCaseCible() {
-		
-		//on choisit ici une case au pif
-		int longueur=(int)Math.random();
-		int largeur=(int)Math.random();
-		
-		int[] cible=new int[2];
-		cible[0]=longueur%loft.largeurLoftX;
-		cible[1]=largeur%loft.longueurLoftY;
-		return cible;
-		
-    
+    public Erratique(){
+    	super();
     }
     
+    public Erratique(int x,int y,Loft loft){
+    	super(x,y,loft);
+    }
+
+    @Override
+    public void action() {
+    	
+    	
+    	Case position=loft.grille[this.getPosX()][this.getPosY()];
+    	
+    	if (!position.aNeuneu()){
+        // S'il est tout seul : il bouffe
+    		if (position.aNourriture()){
+    			this.manger(position.getNourriture());
+                        loft.supprimerBouffe(position.getNourriture());
+    		}
+    	}
+    	else{
+    	// S'il est pas tout seul, il baise puis il bouffe
+            
+            for (Neuneu neuneu : position.getNeuneus()){
+                if (this != neuneu){
+                    //On vérifie que les deux neuneus sont de sexe différent
+                    boolean bebe = this.copuler(neuneu);
+                    
+                    if (bebe){
+                        //On créée un nouveau neuneu du même type que son parent actif
+                        //On le rajoute dans la case et dans le loft
+                        Erratique newErratique = new Erratique(this.getPosX(), this.getPosY(),loft);
+			position.ajouterNeuneu(newErratique);
+                        loft.ajoutListeNeuneu(newErratique);
+                    }
+                   
+                }
+            }
+            
+            if (position.aNourriture()){
+    			this.manger(position.getNourriture());
+                        loft.supprimerBouffe(position.getNourriture());
+            }
+        }
+    	
+    }
+
+    @Override
+    public int[] determineCaseCible(Loft loft) {
+        
+        int coord[] = new int[2];
+        //Choix d'une case au hasard
+        coord[1] = (int) (Math.random() * Loft.largeurLoftX);
+        coord[2] = (int) (Math.random() * Loft.longueurLoftY);
+        
+        return coord;
+    }
 }
