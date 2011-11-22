@@ -4,13 +4,18 @@
  */
 package tp_loft;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.Iterator;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
- *
+ * Instancier la fenêtre une fois que le loft est instancié
+ * Appeler createWindow() juste après
+ * Appeler drawLoft() à chaque tour.
  * @author tagazok
  */
 public class Fenetre extends JFrame {
@@ -42,6 +47,10 @@ public class Fenetre extends JFrame {
         for (int i = 0; i < this.largeurLoft; i++) {
             for (int j = 0; j < this.longueurLoft; j++) {
                 this.jLabelArray[i][j] = new JLabel();
+                this.jLabelArray[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                this.jLabelArray[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+                this.jLabelArray[i][j].setVerticalAlignment(SwingConstants.CENTER);
+                this.jLabelArray[i][j].setForeground(Color.RED);
                 this.getContentPane().add(this.jLabelArray[i][j]);
             }
         }
