@@ -16,8 +16,11 @@ public class Loft {
     protected static int largeurLoftX;
     protected static int longueurLoftY;
     protected static ArrayList<Nourriture> bouffeDispo;
+    protected static ArrayList<Neuneu> neuneuDispo;
     protected static int periodeTour;  // Timer qui lance chaque tour, en ms
     protected int nbNeuneuTotal;
+    protected int nbAjoutMaxNeuneuParTour = 2;
+    protected int nbAjoutMaxNouritureParTour = 5;
 
     public Loft() {
         // Instanciation de la grille
@@ -28,6 +31,12 @@ public class Loft {
                 this.grille[i][j] = new Case(i, j);
             }
         }
+        // Remplissage de la liste de Neuneu dispo (codé en dur car la liste ne changera pas)
+        Loft.neuneuDispo = new ArrayList<Neuneu>();
+        Loft.neuneuDispo.add(new Erratique(this));
+        Loft.neuneuDispo.add(new Lapin(this));
+        Loft.neuneuDispo.add(new Vorace(this));
+        Loft.neuneuDispo.add(new Cannibale(this));
     }
 
     public void tour() {
@@ -38,7 +47,7 @@ public class Loft {
                 Case currentCase = this.grille[i][j];
 
                 if (currentCase.aNeuneu()) {
-                    for (Neuneu neuneu : currentCase.neuneuSurCase) {
+                    for (Neuneu neuneu : currentCase.getNeuneus()) {
                         neuneu.marcher();
                     }
                 }
@@ -59,7 +68,7 @@ public class Loft {
                 Case currentCase = this.grille[i][j];
 
                 if (currentCase.aNeuneu()) {
-                    for (Neuneu neuneu : currentCase.neuneuSurCase) {
+                    for (Neuneu neuneu : currentCase.getNeuneus()) {
                         if (neuneu.getEnergie() == 0) {
                             currentCase.supprimerNeuneu(neuneu);
                         }
@@ -70,15 +79,14 @@ public class Loft {
         }
 
         // Random pour le nombre de bouffe et de neuneu à rajouter
-
-        int nbBouffe = (int) (Math.random() * 5);
-        int nbNeuneu = (int) (Math.random() * 2);
+        int nbBouffe = (int) (Math.random() * this.nbAjoutMaxNouritureParTour);
+        int nbNeuneu = (int) (Math.random() * this.nbAjoutMaxNeuneuParTour);
 
         for (int i = 0; i < nbBouffe; i++) {
             this.ajoutBouffe();
         }
 
-        if (nbNeuneu == 1) {
+        for (int i = 0; i < nbNeuneu; i++) {
             this.ajoutNeuneu();
         }
 
@@ -88,32 +96,50 @@ public class Loft {
     public void ajoutBouffe() {
         // random type 
         int typeRandom = (int) (Math.random() * Loft.bouffeDispo.size());
-        Nourriture Bouffe = Loft.bouffeDispo.get(typeRandom);
+        Nourriture bouffe = Loft.bouffeDispo.get(typeRandom);
 
         //random position + vérifier case libre
+        int[] position = this.randomPosition(bouffe);
+
+        // ajouter Bouffe dans la case sélectionnée
+        this.grille[position[0]][position[1]].ajouterNourriture(bouffe);
+
+    }
+
+    public void ajoutNeuneu() {
+        // Choix du type de neuneu au hasard
+        int typeRandom = (int) (Math.random() * Loft.neuneuDispo.size());
+        Neuneu neuneu = Loft.neuneuDispo.get(typeRandom);
+        
+        // Random position
+        int[] position = this.randomPosition(neuneu);
+        
+        // Ajoute le Neuneu à la case
+        this.grille[position[0]][position[1]].ajouterNeuneu(neuneu);
+    }
+    
+    private int[] randomPosition(Element element) {
+        int[] result = new int[2];
         boolean libre = false;
         int x = 0;
         int y = 0;
 
         while (!libre) {
-
             x = (int) (Math.random() * Loft.largeurLoftX);
             y = (int) (Math.random() * Loft.longueurLoftY);
 
-            if (!this.grille[x][y].aNourriture()) {
+            if (element.getClass().equals(Nourriture.class) && !this.grille[x][y].aNourriture()) {
                 libre = true;
             }
-
+            else if (element.getClass().equals(Neuneu.class) && !this.grille[x][y].aNeuneu()) {
+                libre = true;
+            }
         }
-
-        // ajouter Bouffe dans la case sélectionnée
-        this.grille[x][y].ajouterNourriture(Bouffe);
-
-    }
-
-    public void ajoutNeuneu() {
-        // Choix du type de neuneu au hasard + random position
-        // Utiliser ajoutNeuneu() de la case
+        
+        result[0] = x;
+        result[1] = y;
+        
+        return result;
     }
 
     public int getNbNeuneuTotal() {
