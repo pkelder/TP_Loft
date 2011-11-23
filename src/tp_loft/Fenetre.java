@@ -22,10 +22,10 @@ public class Fenetre extends JFrame {
     /* Attributes */
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int largeurLoft;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private int largeurLoft;
     private int longueurLoft;
     private Loft loft;
     private JLabel[][] jLabelArray;
@@ -63,18 +63,19 @@ public class Fenetre extends JFrame {
     }
 
     public void drawLoft() {
-        Iterator<Neuneu> iterator;
+        Iterator<Neuneu> iteratorNeuneu;
+        Nourriture nourriture;
         Neuneu currNeuneu;
         String label = new String();
 
         for (int i = 0; i < this.largeurLoft; i++) {
             for (int j = 0; j < this.longueurLoft; j++) {
-                iterator = this.loft.getGrille()[i][j].getNeuneus().iterator();
+                iteratorNeuneu = this.loft.getGrille()[i][j].getNeuneus().iterator();
 
                 // On teste le type des Neuneu sur la case pour d√©terminer la lettre correspondante
                 label = "";
-                while (iterator.hasNext()) {
-                    currNeuneu = iterator.next();
+                while (iteratorNeuneu.hasNext()) {
+                    currNeuneu = iteratorNeuneu.next();
                     if (currNeuneu.getClass().equals(Erratique.class)) {
                         label += "E";
                     } else if (currNeuneu.getClass().equals(Lapin.class)) {
@@ -83,6 +84,23 @@ public class Fenetre extends JFrame {
                         label += "V";
                     } else if (currNeuneu.getClass().equals(Cannibale.class)) {
                         label += "C";
+                    }
+                }
+                if (this.loft.getGrille()[i][j].aNeuneu() && this.loft.getGrille()[i][j].aNourriture()) {
+                    label += " ";
+                }
+                if (this.loft.getGrille()[i][j].aNourriture()) {
+                    nourriture = this.loft.getGrille()[i][j].getNourriture();
+                    if (nourriture.getType().equals("banane")) {
+                        label += "b";
+                    } else if (nourriture.getType().equals("chocolat")) {
+                        label += "c";
+                    } else if (nourriture.getType().equals("alcool")) {
+                        label += "a";
+                    } else if (nourriture.getType().equals("fromage")) {
+                        label += "f";
+                    } else if (nourriture.getType().equals("gateau")) {
+                        label += "g";
                     }
                 }
 

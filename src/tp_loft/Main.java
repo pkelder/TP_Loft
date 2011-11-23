@@ -49,7 +49,7 @@ public final class Main {
 				}
 			}	
 			
-		},0, 5000);	
+		},0, 1000);	
 		
 		
 	}
@@ -103,10 +103,10 @@ public final class Main {
 		Loft loft = new Loft();
 
 		// Place la bouffe et les neuneu de départ. Critère :
-		// partie entière du 1/4 du nombre de cases
-		// ajout de bouffe et de Neuneu al�atoirement
+		// partie entière du 1/10 du nombre de cases
+		// ajout de bouffe et de Neuneu al�atoirement
 		// on commence par mettre 25 de chaque, on ajustera surement
-		int nb = (Loft.largeurLoftX * Loft.longueurLoftY) / 4;
+		int nb = (Loft.largeurLoftX * Loft.longueurLoftY) / 10;
 
 		for (int i = 0; i < nb; i++) {
 			loft.ajoutBouffe();
