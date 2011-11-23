@@ -84,7 +84,7 @@ public abstract class Neuneu extends Element {
         deplacementY.add(1);
         deplacementX.add(0);
         deplacementY.add(1);
-        System.out.println("taille d�placements"+deplacementX.size()+" "+deplacementY.size());
+        System.out.println("taille d�placements"+deplacementX.size()+" "+deplacementY.size());
         // Enlève des déplacements dispo les cases occupées
         for (int i = 0; i < 8; i++) {
             absTest = this.posX + deplacementX.get(i);
