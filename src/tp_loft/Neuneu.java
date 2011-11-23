@@ -86,7 +86,7 @@ public abstract class Neuneu extends Element {
         deplacementY.add(1);
 
         // Enlève des déplacements dispo les cases occupées
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             absTest = this.posX + deplacementX.get(i);
             ordTest = this.posY + deplacementY.get(i);
 
