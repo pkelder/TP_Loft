@@ -49,14 +49,14 @@ public abstract class Neuneu extends Element {
         this.estMature--;
 
         // Recherche une case jusqu'à en trouver une de libre
-        while (!hasMoved) {
+        //while (!hasMoved) {
             // Case où se déplacer
             caseDeplacement = determineCaseDeplacement();
 
             // Déplacement
             this.loft.getGrille()[this.posX][this.posY].supprimerNeuneu(this);
             hasMoved = this.loft.getGrille()[caseDeplacement[0]][caseDeplacement[1]].ajouterNeuneu(this);
-        }
+        //}
         this.posX = caseDeplacement[0];
         this.posY = caseDeplacement[1];
     }

@@ -70,7 +70,7 @@ public class Case {
         // Appelle les action de la liste de Neuneu.
         // S'il y a deux Neuneu : aléatoire pour déterminer lequel fait l'action
         if (this.aNeuneu()) {
-            if (this.neuneuSurCase.size() == 2) {
+            if (this.fullNeuneu()) {
                 int random = (int) (Math.random() * 2);
                 this.neuneuSurCase.get(random).action();
             } else {

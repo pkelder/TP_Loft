@@ -41,14 +41,14 @@ public class Loft {
 					for (Neuneu neuneu : this.listeNeuneu) {
 						neuneu.marcher();
 					}
-			/*
+		
 		// un autre balayage pour action(),
 		for (int i = 0; i < Loft.largeurLoftX; i++) {
 			for (int j = 0; j < Loft.longueurLoftY; j++) {
 				this.grille[i][j].action();
 			}
 		}
-
+/*
 		// un autre pour nettoyer les neuneus à zéro d'énergie et la bouffe à 0 également
 		for (int i = 0; i < Loft.largeurLoftX; i++) {
 			for (int j = 0; j < Loft.longueurLoftY; j++) {
