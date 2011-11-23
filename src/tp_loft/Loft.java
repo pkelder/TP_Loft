@@ -124,8 +124,8 @@ public class Loft {
 
 		while (!libre) {
 
-			x = (int) (Math.random() * Loft.largeurLoftX);
-			y = (int) (Math.random() * Loft.longueurLoftY);
+			x = (int) (Math.random() * (Loft.largeurLoftX-1));
+			y = (int) (Math.random() * (Loft.longueurLoftY-1));
 
 			if (!this.grille[x][y].aNeuneu())
 				libre = true;

@@ -46,7 +46,7 @@ public abstract class Neuneu extends Element {
 
         // Case où se déplacer
         int[] caseDeplacement = determineCaseDeplacement();
-
+        System.out.println("case:"+caseDeplacement[0]+" "+caseDeplacement[1]);
         // Déplacement
         this.loft.getGrille()[this.posX][this.posY].supprimerNeuneu(this);
         this.loft.getGrille()[caseDeplacement[0]][caseDeplacement[1]].ajouterNeuneu(this);
@@ -84,9 +84,9 @@ public abstract class Neuneu extends Element {
         deplacementY.add(1);
         deplacementX.add(0);
         deplacementY.add(1);
-
+        System.out.println("taille d�placements"+deplacementX.size()+" "+deplacementY.size());
         // Enlève des déplacements dispo les cases occupées
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             absTest = this.posX + deplacementX.get(i);
             ordTest = this.posY + deplacementY.get(i);
 
@@ -104,7 +104,6 @@ public abstract class Neuneu extends Element {
 
             // Test si la case est vide
 
-            System.out.println(absTest + " " + ordTest);
             if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
                 deplacementX.remove(i);
                 deplacementY.remove(i);
@@ -127,10 +126,20 @@ public abstract class Neuneu extends Element {
             }
         }
 
-        // On retourne les coordonnées de la case libre dont la distance est la plus courte avec la cible
-        result[0] = this.posX + deplacementX.get(deplacementPlusCourt);
-        result[1] = this.posY + deplacementY.get(deplacementPlusCourt);
 
+        // On retourne les coordonnées de la case libre dont la distance est la plus courte avec la cible
+        int caselibreX= this.posX + deplacementX.get(deplacementPlusCourt);
+        int caselibreY= this.posY + deplacementY.get(deplacementPlusCourt);
+       
+        if ((caselibreX<0)||(caselibreX>Loft.largeurLoftX)){ result[0]=this.posX;}
+        else {
+        	 result[0] = this.posX + deplacementX.get(deplacementPlusCourt);
+        }
+        if ((caselibreY<0)||(caselibreY>Loft.longueurLoftY)){ result[1]=this.posY;}
+        else {
+        result[1] = this.posY + deplacementY.get(deplacementPlusCourt);
+        }
+        
         return result;
     }
 
