@@ -5,6 +5,7 @@
 package tp_loft;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -86,10 +87,12 @@ public abstract class Neuneu extends Element {
         deplacementY.add(1);
         System.out.println("taille d�placements"+deplacementX.size()+" "+deplacementY.size());
         // Enlève des déplacements dispo les cases occupées
-        for (int i = 0; i < 8; i++) {
-            absTest = this.posX + deplacementX.get(i);
-            ordTest = this.posY + deplacementY.get(i);
-
+        Iterator<Integer> i = deplacementX.iterator();
+        Iterator<Integer> j = deplacementY.iterator();
+        while (i.hasNext()) {
+            absTest = this.posX + i.next();
+            ordTest = this.posY + j.next();
+        
             // Gestions des effets de bord
             if (absTest < 0) {
                 absTest = 0;
@@ -105,8 +108,8 @@ public abstract class Neuneu extends Element {
             // Test si la case est vide
 
             if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
-                deplacementX.remove(i);
-                deplacementY.remove(i);
+                i.remove();
+                j.remove();
             }
         }
 
@@ -115,14 +118,14 @@ public abstract class Neuneu extends Element {
         // On calcule la distance la plus courte entre les cases dispo restantes et la cible
         int length = deplacementX.size();
         float distanceTest;
-        for (int i = 0; i < length; i++) {
-            absTest = this.posX + deplacementX.get(i);
-            ordTest = this.posY + deplacementY.get(i);
+        for (int k = 0; k < length; k++) {
+            absTest = this.posX + deplacementX.get(k);
+            ordTest = this.posY + deplacementY.get(k);
             distanceTest = calculDistance(absTest, ordTest, coordCible[0], coordCible[1]);
 
             if (distanceTest < distancePlusCourte) {
                 distancePlusCourte = distanceTest;
-                deplacementPlusCourt = i;
+                deplacementPlusCourt = k;
             }
         }
 
