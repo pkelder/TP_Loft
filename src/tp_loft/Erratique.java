@@ -34,7 +34,7 @@ public class Erratique extends Neuneu {
         // S'il est tout seul : il bouffe
     		if (position.aNourriture()){
     			this.manger(position.getNourriture());
-                        loft.supprimerBouffe(position.getNourriture());
+                        position.getNourriture().setEnergie(0);
     		}
     	}
     	else{
@@ -49,7 +49,7 @@ public class Erratique extends Neuneu {
                         //On créée un nouveau neuneu du même type que son parent actif
                         //On le rajoute dans la case et dans le loft
                         Erratique newErratique = new Erratique(this.getPosX(), this.getPosY(),loft);
-			position.ajouterNeuneu(newErratique);
+                        position.ajouterNeuneu(newErratique);
                         loft.ajoutListeNeuneu(newErratique);
                     }
                    
@@ -58,7 +58,8 @@ public class Erratique extends Neuneu {
             
             if (position.aNourriture()){
     			this.manger(position.getNourriture());
-                        loft.supprimerBouffe(position.getNourriture());
+                      //  loft.supprimerBouffe(position.getNourriture());
+                        position.getNourriture().setEnergie(0);
             }
         }
     	
