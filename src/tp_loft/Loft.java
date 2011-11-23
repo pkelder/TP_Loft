@@ -37,13 +37,11 @@ public class Loft {
 	public void tour() {
 
 		// Un balayage de la grille pour marcher()
-
 		
 					for (Neuneu neuneu : this.listeNeuneu) {
 						neuneu.marcher();
 					}
 			
-
 		// un autre balayage pour action(),
 		for (int i = 0; i < Loft.largeurLoftX; i++) {
 			for (int j = 0; j < Loft.longueurLoftY; j++) {
@@ -117,55 +115,54 @@ public class Loft {
 
 	public void ajoutNeuneu() {
 		// Choix du type de neuneu au hasard + random position
-		int n = (int) (Math.random() * 4);
+				int n = (int) (Math.random() * 4);
 
-		// random position + vérifier case libre
-		boolean libre = false;
-		int x = 0;
-		int y = 0;
+				// random position + vérifier case libre
+				boolean libre = false;
+				int x = 0;
+				int y = 0;
 
-		while (!libre) {
+				while (!libre) {
 
-			x = (int) (Math.random() * (Loft.largeurLoftX-1));
-			y = (int) (Math.random() * (Loft.longueurLoftY-1));
+					x = (int) (Math.random() * (Loft.largeurLoftX-1));
+					y = (int) (Math.random() * (Loft.longueurLoftY-1));
 
-			if (!this.grille[x][y].aNeuneu())
-				libre = true;
+					if (!this.grille[x][y].aNeuneu())
+						libre = true;
 
-		}
+				}
 
-		switch (n) {
-		case 0:
-			n = 0;
-			Erratique newErratique = new Erratique(x, y,this);
-			newErratique.setPosX(x);
-			newErratique.setPosY(y);
-			this.grille[x][y].ajouterNeuneu(newErratique);
-			this.listeNeuneu.add(newErratique);
-			break;
+				switch (n) {
+				case 0:
+					n = 0;
+					Erratique newErratique = new Erratique(x, y,this);
+					newErratique.setPosX(x);
+					newErratique.setPosY(y);
+					this.grille[x][y].ajouterNeuneu(newErratique);
+					this.listeNeuneu.add(newErratique);
+					break;
 
-		case 1:
-			n = 1;
-			Vorace newVorace = new Vorace(x, y,this);
-			this.grille[x][y].ajouterNeuneu(newVorace);
-			this.listeNeuneu.add(newVorace);
-			break;
+				case 1:
+					n = 1;
+					Vorace newVorace = new Vorace(x, y,this);
+					this.grille[x][y].ajouterNeuneu(newVorace);
+					this.listeNeuneu.add(newVorace);
+					break;
 
-		case 2:
-			n = 2;
-			Lapin newLapin = new Lapin(x, y,this);
-			this.grille[x][y].ajouterNeuneu(newLapin);
-			this.listeNeuneu.add(newLapin);
-			break;
+				case 2:
+					n = 2;
+					Lapin newLapin = new Lapin(x, y,this);
+					this.grille[x][y].ajouterNeuneu(newLapin);
+					this.listeNeuneu.add(newLapin);
+					break;
 
-		case 3:
-			n = 3;
-			Cannibale newCannibale = new Cannibale(x, y,this);
-			this.grille[x][y].ajouterNeuneu(newCannibale);
-			this.listeNeuneu.add(newCannibale);
-			break;
-		}
-
+				case 3:
+					n = 3;
+					Cannibale newCannibale = new Cannibale(x, y,this);
+					this.grille[x][y].ajouterNeuneu(newCannibale);
+					this.listeNeuneu.add(newCannibale);
+					break;
+				}
 	}
 	
 	public void supprimerBouffe(Nourriture n){
