@@ -41,12 +41,11 @@ public class Loft {
 					for (Neuneu neuneu : this.listeNeuneu) {
 						neuneu.marcher();
 					}
-			
+			/*
 		// un autre balayage pour action(),
 		for (int i = 0; i < Loft.largeurLoftX; i++) {
 			for (int j = 0; j < Loft.longueurLoftY; j++) {
-				Case currentCase = this.grille[i][j];
-				currentCase.action();
+				this.grille[i][j].action();
 			}
 		}
 
@@ -90,7 +89,7 @@ public class Loft {
 
 		if (nbNeuneu == 1)
 			this.ajoutNeuneu();
-
+*/
 	}
 
 	public void ajoutBouffe() {

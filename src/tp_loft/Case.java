@@ -18,21 +18,26 @@ public class Case {
     protected int Y;
 
     public Case() {
-    	 this.neuneuSurCase=new ArrayList<Neuneu> ();
-    	 this.bouffe=null;
-    }
-    
-    public Case(int x, int y){
-        this.X = x;
-        this.Y = y;
-        this.neuneuSurCase=new ArrayList<Neuneu> ();
-        this.bouffe=null;
+        this.neuneuSurCase = new ArrayList<Neuneu>();
+        this.bouffe = null;
     }
 
-    public void ajouterNeuneu(Neuneu neuneu) {
-        if (this.neuneuSurCase.size()<2){
+    public Case(int x, int y) {
+        this.X = x;
+        this.Y = y;
+        this.neuneuSurCase = new ArrayList<Neuneu>();
+        this.bouffe = null;
+    }
+
+    public boolean ajouterNeuneu(Neuneu neuneu) {
+        boolean isAdded;
+        if (this.neuneuSurCase.size() < 2) {
             this.neuneuSurCase.add(neuneu);
+            isAdded = true;
+        } else {
+            isAdded = false;
         }
+        return isAdded;
     }
 
     public void supprimerNeuneu(Neuneu neuneu) {
@@ -40,7 +45,9 @@ public class Case {
     }
 
     public void ajouterNourriture(Nourriture nourriture) {
-        if (this.bouffe == null) this.bouffe = nourriture;
+        if (this.bouffe == null) {
+            this.bouffe = nourriture;
+        }
     }
 
     public void supprimerNourriture() {
@@ -48,11 +55,11 @@ public class Case {
     }
 
     public boolean aNourriture() {
-        return this.bouffe!=null ;
+        return this.bouffe != null;
     }
 
     public boolean aNeuneu() {
-        return !this.neuneuSurCase.isEmpty() ;
+        return !this.neuneuSurCase.isEmpty();
     }
 
     public boolean fullNeuneu() {
@@ -71,22 +78,20 @@ public class Case {
             }
         }
     }
-    
-    
 
     public ArrayList<Neuneu> getNeuneus() {
         return this.neuneuSurCase;
     }
-    
-    public Nourriture getNourriture(){
-    	return this.bouffe;
+
+    public Nourriture getNourriture() {
+        return this.bouffe;
     }
-    
-    public int getPosX(){
-    	return this.X;
+
+    public int getPosX() {
+        return this.X;
     }
-    
-    public int getPosY(){
-    	return this.Y;
+
+    public int getPosY() {
+        return this.Y;
     }
 }

@@ -42,15 +42,21 @@ public abstract class Neuneu extends Element {
     }
 
     public void marcher() {
+        boolean hasMoved = false;
+        int[] caseDeplacement = new int[2];
+
         // Décrémente estMature
         this.estMature--;
 
-        // Case où se déplacer
-        int[] caseDeplacement = determineCaseDeplacement();
-        System.out.println("case:" + caseDeplacement[0] + " " + caseDeplacement[1]);
-        // Déplacement
-        this.loft.getGrille()[this.posX][this.posY].supprimerNeuneu(this);
-        this.loft.getGrille()[caseDeplacement[0]][caseDeplacement[1]].ajouterNeuneu(this);
+        // Recherche une case jusqu'à en trouver une de libre
+        while (!hasMoved) {
+            // Case où se déplacer
+            caseDeplacement = determineCaseDeplacement();
+
+            // Déplacement
+            this.loft.getGrille()[this.posX][this.posY].supprimerNeuneu(this);
+            hasMoved = this.loft.getGrille()[caseDeplacement[0]][caseDeplacement[1]].ajouterNeuneu(this);
+        }
         this.posX = caseDeplacement[0];
         this.posY = caseDeplacement[1];
     }
@@ -80,11 +86,13 @@ public abstract class Neuneu extends Element {
         deplacementX.add(-1);
         deplacementY.add(0);
         deplacementX.add(-1);
-        deplacementY.add(0);
-        deplacementX.add(-1);
         deplacementY.add(1);
         deplacementX.add(0);
         deplacementY.add(1);
+        deplacementX.add(1);
+        deplacementY.add(1);
+        deplacementX.add(0);
+        deplacementY.add(0);
 
         // Enlève des déplacements dispo les cases occupées
         Iterator<Integer> i = deplacementX.iterator();
@@ -98,7 +106,7 @@ public abstract class Neuneu extends Element {
                 i.remove();
                 j.remove();
             } // Si elle est dans la grille mais pleine, on l'enlève
-            else if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
+            else if (this.loft.getGrille()[absTest][ordTest].fullNeuneu() && absTest != this.posX && ordTest != this.posY) {
                 i.remove();
                 j.remove();
             }
