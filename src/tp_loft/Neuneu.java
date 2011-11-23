@@ -47,7 +47,7 @@ public abstract class Neuneu extends Element {
 
         // Case où se déplacer
         int[] caseDeplacement = determineCaseDeplacement();
-        System.out.println("case:"+caseDeplacement[0]+" "+caseDeplacement[1]);
+        System.out.println("case:" + caseDeplacement[0] + " " + caseDeplacement[1]);
         // Déplacement
         this.loft.getGrille()[this.posX][this.posY].supprimerNeuneu(this);
         this.loft.getGrille()[caseDeplacement[0]][caseDeplacement[1]].ajouterNeuneu(this);
@@ -85,29 +85,20 @@ public abstract class Neuneu extends Element {
         deplacementY.add(1);
         deplacementX.add(0);
         deplacementY.add(1);
-        System.out.println("taille d�placements"+deplacementX.size()+" "+deplacementY.size());
+
         // Enlève des déplacements dispo les cases occupées
         Iterator<Integer> i = deplacementX.iterator();
         Iterator<Integer> j = deplacementY.iterator();
         while (i.hasNext()) {
             absTest = this.posX + i.next();
             ordTest = this.posY + j.next();
-        
-            // Gestions des effets de bord
-            if (absTest < 0) {
-                absTest = 0;
-            } else if (absTest >= Loft.largeurLoftX) {
-                absTest = Loft.largeurLoftX - 1;
-            }
-            if (ordTest < 0) {
-                ordTest = 0;
-            } else if (ordTest >= Loft.longueurLoftY) {
-                ordTest = Loft.longueurLoftY - 1;
-            }
 
-            // Test si la case est vide
-
-            if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
+            // Si la case est en dehors de la grille, on l'enlève
+            if (absTest < 0 || absTest >= Loft.largeurLoftX || ordTest < 0 || ordTest >= Loft.longueurLoftY) {
+                i.remove();
+                j.remove();
+            } // Si elle est dans la grille mais pleine, on l'enlève
+            else if (this.loft.getGrille()[absTest][ordTest].fullNeuneu()) {
                 i.remove();
                 j.remove();
             }
@@ -129,20 +120,13 @@ public abstract class Neuneu extends Element {
             }
         }
 
-
         // On retourne les coordonnées de la case libre dont la distance est la plus courte avec la cible
-        int caselibreX= this.posX + deplacementX.get(deplacementPlusCourt);
-        int caselibreY= this.posY + deplacementY.get(deplacementPlusCourt);
-       
-        if ((caselibreX<0)||(caselibreX>Loft.largeurLoftX)){ result[0]=this.posX;}
-        else {
-        	 result[0] = this.posX + deplacementX.get(deplacementPlusCourt);
-        }
-        if ((caselibreY<0)||(caselibreY>Loft.longueurLoftY)){ result[1]=this.posY;}
-        else {
-        result[1] = this.posY + deplacementY.get(deplacementPlusCourt);
-        }
-        
+        int caselibreX = this.posX + deplacementX.get(deplacementPlusCourt);
+        int caselibreY = this.posY + deplacementY.get(deplacementPlusCourt);
+
+        result[0] = caselibreX;
+        result[1] = caselibreY;
+
         return result;
     }
 
