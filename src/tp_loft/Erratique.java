@@ -34,7 +34,6 @@ public class Erratique extends Neuneu {
         // S'il est tout seul : il bouffe
     		if (position.aNourriture()){
     			this.manger(position.getNourriture());
-                        position.getNourriture().setEnergie(0);
     		}
     	}
     	else{
@@ -58,8 +57,7 @@ public class Erratique extends Neuneu {
             
             if (position.aNourriture()){
     			this.manger(position.getNourriture());
-                      //  loft.supprimerBouffe(position.getNourriture());
-                        position.getNourriture().setEnergie(0);
+                      
             }
         }
     	

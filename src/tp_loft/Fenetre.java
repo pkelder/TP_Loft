@@ -50,7 +50,7 @@ public class Fenetre extends JFrame {
         // Intanciation des JLabel et on les met dans la grille de la fen√™tre
         for (int i = 0; i < this.largeurLoft; i++) {
             for (int j = 0; j < this.longueurLoft; j++) {
-                this.jLabelArray[i][j] = new JLabel();
+				this.jLabelArray[i][j] = new JLabel();
                 this.jLabelArray[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 this.jLabelArray[i][j].setHorizontalAlignment(SwingConstants.CENTER);
                 this.jLabelArray[i][j].setVerticalAlignment(SwingConstants.CENTER);
@@ -111,3 +111,6 @@ public class Fenetre extends JFrame {
         }
     }
 }
+
+
+              

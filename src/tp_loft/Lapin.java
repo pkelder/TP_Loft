@@ -55,7 +55,6 @@ public class Lapin extends Neuneuphile {
                     
                     if (currentCase.aNourriture()){
     			this.manger(currentCase.getNourriture());
-    			currentCase.getNourriture().setEnergie(0);
                        
                     }
 
