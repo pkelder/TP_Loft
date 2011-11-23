@@ -43,6 +43,7 @@ public final class Main {
 				System.out.println("Nouveau tour");
 				window.drawLoft();
 				loft.tour();
+				System.out.println("nombre de Neuneu restant: "+loft.getnbNeuneuTotal());
 				if (loft.getnbNeuneuTotal()<2){
 					timer.cancel();
 				}
