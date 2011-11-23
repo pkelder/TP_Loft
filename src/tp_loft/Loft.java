@@ -135,7 +135,7 @@ public class Loft {
 		}
 
 		switch (n) {
-		case 1:
+		case 0:
 			n = 0;
 			Erratique newErratique = new Erratique(x, y,this);
 			newErratique.setPosX(x);
@@ -144,21 +144,21 @@ public class Loft {
 			this.listeNeuneu.add(newErratique);
 			break;
 
-		case 2:
+		case 1:
 			n = 1;
 			Vorace newVorace = new Vorace(x, y,this);
 			this.grille[x][y].ajouterNeuneu(newVorace);
 			this.listeNeuneu.add(newVorace);
 			break;
 
-		case 3:
+		case 2:
 			n = 2;
 			Lapin newLapin = new Lapin(x, y,this);
 			this.grille[x][y].ajouterNeuneu(newLapin);
 			this.listeNeuneu.add(newLapin);
 			break;
 
-		case 4:
+		case 3:
 			n = 3;
 			Cannibale newCannibale = new Cannibale(x, y,this);
 			this.grille[x][y].ajouterNeuneu(newCannibale);

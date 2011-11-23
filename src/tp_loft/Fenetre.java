@@ -76,7 +76,7 @@ public class Fenetre extends JFrame {
                 while (iterator.hasNext()) {
                     currNeuneu = iterator.next();
                     if (currNeuneu.getClass().equals(Erratique.class)) {
-                        label += "I";
+                        label += "E";
                     } else if (currNeuneu.getClass().equals(Lapin.class)) {
                         label += "L";
                     } else if (currNeuneu.getClass().equals(Vorace.class)) {
